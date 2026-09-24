@@ -45,3 +45,4 @@ prisma/migrations/dev/
 # Logs
 logs/
 *.log
+.env*
