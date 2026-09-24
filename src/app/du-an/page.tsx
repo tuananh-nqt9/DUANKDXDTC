@@ -2,6 +2,9 @@ import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 import { MapPin, Calendar } from "lucide-react";
 
 export default async function ProjectsPage() {

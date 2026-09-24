@@ -3,6 +3,9 @@ import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
+
+// Force dynamic rendering - tránh lỗi prerender trên Vercel
+export const dynamic = "force-dynamic";
 import {
   Phone,
   Mail,

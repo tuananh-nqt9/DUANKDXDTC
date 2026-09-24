@@ -1,6 +1,9 @@
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 import {
   FlaskConical, ClipboardCheck, Mountain, HardHat, Activity, MountainSnow,
   ArrowRight, CheckCircle,

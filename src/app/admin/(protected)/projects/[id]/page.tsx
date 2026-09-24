@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { updateProject } from "../actions";
 import { notFound } from "next/navigation";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 export default async function EditProjectPage({ params }: { params: { id: string } }) {
   const project = await prisma.project.findUnique({ where: { id: params.id } });
   if (!project) notFound();

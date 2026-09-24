@@ -3,6 +3,9 @@ import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 
 export default async function PostDetailPage({ params }: { params: { slug: string } }) {
