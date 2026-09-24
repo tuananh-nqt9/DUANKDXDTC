@@ -96,7 +96,10 @@ export default async function HomePage() {
                   <MessageCircle className="w-5 h-5" />
                   Yêu cầu tư vấn
                 </Link>
-                <Link href="/gioi-thieu" className="btn-secondary !text-white !border-white hover:!bg-white/10">
+                <Link
+                  href="/gioi-thieu"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-md transition-all duration-300 hover:bg-white/10"
+                >
                   Tìm hiểu thêm
                   <ChevronRight className="w-4 h-4" />
                 </Link>
@@ -342,7 +345,10 @@ export default async function HomePage() {
                 <Phone className="w-5 h-5" />
                 Gọi 0939.688.669
               </a>
-              <Link href="/lien-he" className="btn-secondary !text-white !border-white hover:!bg-white/10">
+              <Link
+                href="/lien-he"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-md transition-all duration-300 hover:bg-white/10"
+              >
                 <Mail className="w-5 h-5" />
                 Gửi yêu cầu
               </Link>
