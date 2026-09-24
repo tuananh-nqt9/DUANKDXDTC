@@ -1,0 +1,84 @@
+// Prisma schema cho website Thanh Chương JSC
+// Database: SQLite (free, chạy local được)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User - Quản trị viên
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Bcrypt hash
+  name      String
+  role      String   @default("admin") // admin | editor
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Service - Dịch vụ / Ngành nghề
+model Service {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  icon        String   @default("wrench") // Lucide icon name
+  excerpt     String?
+  content     String?
+  image       String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Project - Dự án
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  client      String?
+  location    String?
+  year        Int?
+  category    String?
+  excerpt     String?
+  content     String?
+  image       String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Post - Tin tức
+model Post {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String?
+  content     String
+  image       String?
+  author      String?  @default("Admin")
+  category    String?
+  views       Int      @default(0)
+  published   Boolean  @default(true)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Contact - Liên hệ từ khách hàng
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  service   String?
+  message   String
+  status    String   @default("new") // new | read | replied
+  createdAt DateTime @default(now())
+}
