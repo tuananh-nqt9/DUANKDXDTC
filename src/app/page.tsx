@@ -250,7 +250,11 @@ export default async function HomePage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.map((project) => (
-                <div key={project.id} className="card group">
+                <Link
+                  key={project.id}
+                  href={`/du-an/${project.slug}`}
+                  className="card group block hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                >
                   <div className="relative h-56 overflow-hidden">
                     {project.image && (
                       <Image
@@ -282,7 +286,7 @@ export default async function HomePage() {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 
