@@ -107,7 +107,7 @@ export default async function ProjectDetailPage({
                   Mô tả dự án
                 </h2>
                 <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
-                  {project.description || project.excerpt || "Đang cập nhật..."}
+                  {project.content || project.excerpt || "Đang cập nhật..."}
                 </div>
 
                 <div className="mt-10">
