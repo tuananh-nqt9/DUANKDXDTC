@@ -7,8 +7,8 @@ import { Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@thanhchuong.vn");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -124,10 +124,6 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-primary-50 rounded-lg text-xs text-primary-800 border border-primary-200">
-            <strong>🎯 Tài khoản demo:</strong>
-            <div className="mt-1 font-mono">admin@thanhchuong.vn / admin123</div>
-          </div>
         </div>
 
         <div className="text-center mt-6">
