@@ -1,0 +1,55 @@
+model TestCategory {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  icon        String   @default("flask-conical")
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tests Test[]
+
+  @@map("test_categories")
+}
+
+model Test {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  standard    String?  // Tiêu chuẩn áp dụng (VD: TCVN 1234:2020)
+  method      String?  // Phương pháp thử
+  scope       String?  // Phạm vi áp dụng
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categoryId String
+  category   TestCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("tests")
+}
+
+model Equipment {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  model        String?
+  manufacturer String?  // Nhà sản xuất
+  origin       String?  // Xuất xứ
+  year         Int?     // Năm sản xuất
+  description  String?  @db.Text
+  specs        String?  @db.Text // Thông số kỹ thuật
+  image        String?
+  category     String?
+  order        Int      @default(0)
+  featured     Boolean  @default(false)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("equipment")
+}

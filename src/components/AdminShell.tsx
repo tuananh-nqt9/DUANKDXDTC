@@ -10,6 +10,8 @@ import {
   LogOut,
   Home,
   User,
+  TestTube,
+  Wrench,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -27,6 +29,8 @@ const menuItems = [
   { href: "/admin/services", label: "Dịch vụ", icon: FlaskConical },
   { href: "/admin/projects", label: "Dự án", icon: Building2 },
   { href: "/admin/posts", label: "Tin tức", icon: Newspaper },
+  { href: "/admin/test-categories", label: "Chỉ tiêu phép thử", icon: TestTube },
+  { href: "/admin/equipment", label: "Trang thiết bị", icon: Wrench },
   { href: "/admin/contacts", label: "Liên hệ", icon: Mail },
 ];
 

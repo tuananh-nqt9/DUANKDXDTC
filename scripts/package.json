@@ -1,0 +1,9 @@
+{
+  "name": "optimize-logo",
+  "version": "1.0.0",
+  "description": "Tối ưu logo THANH CHƯƠNG JSC",
+  "main": "optimize-logo.js",
+  "scripts": {
+    "start": "node optimize-logo.js"
+  }
+}

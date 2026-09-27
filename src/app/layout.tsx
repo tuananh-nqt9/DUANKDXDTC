@@ -1,27 +1,33 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SEO, COMPANY } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: {
-    default: "THANH CHƯƠNG JSC - LAS XD 795 | Kiểm định Xây dựng",
-    template: "%s | THANH CHƯƠNG JSC",
+    default: SEO.defaultTitle,
+    template: SEO.titleTemplate,
   },
-  description:
-    "Công ty CP Xây dựng Thanh Chương - Phòng thí nghiệm LAS-XD 795. Dịch vụ kiểm định, thí nghiệm vật liệu xây dựng, giám sát thi công.",
-  keywords: [
-    "kiểm định xây dựng",
-    "thí nghiệm vật liệu",
-    "LAS XD 795",
-    "Thanh Chương",
-    "tư vấn giám sát",
-  ],
-  authors: [{ name: "Thanh Chương JSC" }],
+  description: SEO.description,
+  keywords: SEO.keywords,
+  authors: [{ name: COMPANY.shortName }],
   openGraph: {
-    title: "THANH CHƯƠNG JSC - LAS XD 795",
-    description: "Kiểm định Xây dựng chuyên nghiệp",
+    title: SEO.defaultTitle,
+    description: SEO.description,
     type: "website",
     locale: "vi_VN",
+    url: COMPANY.contact.website,
+    siteName: COMPANY.shortName,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: SEO.defaultTitle,
+    description: SEO.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL(COMPANY.contact.website || "https://kdxdthanhchuong.vn"),
 };
 
 export default function RootLayout({
@@ -37,6 +43,33 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
+        />
+        
+        {/* Structured Data - Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: COMPANY.name,
+              alternateName: COMPANY.shortName,
+              url: COMPANY.contact.website,
+              email: COMPANY.contact.email,
+              telephone: COMPANY.contact.hotline,
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: COMPANY.offices[0].address,
+                addressLocality: COMPANY.offices[0].city,
+                addressCountry: "VN",
+              },
+              sameAs: [
+                COMPANY.social.facebook,
+                COMPANY.social.youtube,
+                COMPANY.social.zalo,
+              ].filter(Boolean),
+            }),
+          }}
         />
       </head>
       <body className="min-h-screen flex flex-col">{children}</body>

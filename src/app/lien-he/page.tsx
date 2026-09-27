@@ -1,8 +1,10 @@
 "use client";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { BackToTop } from "@/components/BackToTop";
 import { useState } from "react";
-import { Phone, Mail, MapPin, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Loader2, CheckCircle, AlertCircle, Clock, Navigation } from "lucide-react";
+import { COMPANY } from "@/lib/constants";
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
@@ -53,25 +55,31 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <section className="py-16">
+        <section className="py-16 bg-gray-50">
           <div className="container-custom">
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Info */}
               <div className="space-y-6">
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                   <Phone className="w-8 h-8 text-primary-600 mb-3" />
                   <h3 className="font-bold text-gray-900 mb-1">Hotline</h3>
-                  <a href="tel:0939688669" className="text-primary-600 hover:underline">0939.688.669</a>
+                  <a href={`tel:${COMPANY.contact.hotline}`} className="text-primary-600 hover:underline text-lg font-semibold">
+                    {COMPANY.contact.hotline.replace(/(\d{4})(\d{3})(\d{3})/, '$1.$2.$3')}
+                  </a>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                   <Mail className="w-8 h-8 text-primary-600 mb-3" />
                   <h3 className="font-bold text-gray-900 mb-1">Email</h3>
-                  <a href="mailto:Thanhchuong.jsc@gmail.com" className="text-primary-600 hover:underline">Thanhchuong.jsc@gmail.com</a>
+                  <a href={`mailto:${COMPANY.contact.email}`} className="text-primary-600 hover:underline break-all">
+                    {COMPANY.contact.email}
+                  </a>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <MapPin className="w-8 h-8 text-primary-600 mb-3" />
-                  <h3 className="font-bold text-gray-900 mb-1">Văn phòng</h3>
-                  <p className="text-sm text-gray-700">Hà Nội, Bắc Ninh, Lạng Sơn</p>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                  <Clock className="w-8 h-8 text-primary-600 mb-3" />
+                  <h3 className="font-bold text-gray-900 mb-1">Giờ làm việc</h3>
+                  <p className="text-sm text-gray-700 mb-1">{COMPANY.workingHours.weekdays}</p>
+                  <p className="text-sm text-gray-700 mb-1">{COMPANY.workingHours.saturday}</p>
+                  <p className="text-sm text-gray-500">{COMPANY.workingHours.sunday}</p>
                 </div>
               </div>
 
@@ -140,8 +148,74 @@ export default function ContactPage() {
             </div>
           </div>
         </section>
+
+        {/* GOOGLE MAPS - VĂN PHÒNG */}
+        <section className="py-16 bg-white">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">Địa chỉ văn phòng</h2>
+              <p className="text-gray-600">Hệ thống văn phòng và phòng thí nghiệm của chúng tôi</p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              {COMPANY.offices.map((office) => (
+                <div key={office.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all">
+                  {/* Map */}
+                  <div className="relative w-full h-80 bg-gray-100">
+                    <iframe
+                      src={office.embedUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`Bản đồ ${office.city}`}
+                    ></iframe>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-6">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-6 h-6 text-primary-600" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-bold text-xl text-gray-900">{office.city}</h3>
+                          <span className="text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full font-medium">
+                            {office.type}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">{office.address}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 mb-4 text-sm">
+                      <Phone className="w-4 h-4 text-primary-600" />
+                      <a href={`tel:${office.phone}`} className="text-primary-600 hover:underline font-semibold">
+                        {office.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1.$2.$3')}
+                      </a>
+                    </div>
+
+                    <a
+                      href={office.map}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold text-sm group"
+                    >
+                      <Navigation className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      Xem chỉ đường trên Google Maps
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
+      <BackToTop />
     </>
   );
 }

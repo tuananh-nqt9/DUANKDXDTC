@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - THANH CHƯƠNG JSC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature {
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .feature:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        .feature h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .status.ready {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status.new {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .info {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid #3b82f6;
+        }
+        .info h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        .info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info li {
+            color: #475569;
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .info li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎉 Tính năng mới: Danh mục Phép thử & Thiết bị</h1>
+        
+        <div class="feature-grid">
+            <div class="feature">
+                <h3>🧪 Chỉ tiêu phép thử</h3>
+                <p>Quản lý danh mục và các phép thử thí nghiệm. Hiển thị trên trang chủ và trang riêng.</p>
+                <span class="status ready">✓ Đã sẵn sàng</span>
+            </div>
+            
+            <div class="feature">
+                <h3>🔧 Trang thiết bị</h3>
+                <p>Quản lý các thiết bị thí nghiệm hiện đại với thông tin chi tiết và hình ảnh.</p>
+                <span class="status ready">✓ Đã sẵn sàng</span>
+            </div>
+            
+            <div class="feature">
+                <h3>📄 Trang công khai</h3>
+                <p>Hai trang mới: /chi-tieu-phep-thu và /trang-thiet-bi để khách hàng xem.</p>
+                <span class="status new">🆕 Mới</span>
+            </div>
+            
+            <div class="feature">
+                <h3>🎨 Giao diện Admin</h3>
+                <p>Thêm 2 menu mới trong Admin Panel để quản lý nội dung dễ dàng.</p>
+                <span class="status new">🆕 Mới</span>
+            </div>
+        </div>
+
+        <div class="info">
+            <h4>📋 Hướng dẫn sử dụng:</h4>
+            <ul>
+                <li>Đăng nhập vào Admin Panel</li>
+                <li>Chọn "Chỉ tiêu phép thử" hoặc "Trang thiết bị" từ menu</li>
+                <li>Nhấn "Thêm mới" để tạo danh mục/thiết bị</li>
+                <li>Upload hình ảnh vào thư mục <code>public/images/equipment/</code></li>
+                <li>Đặt thứ tự hiển thị và bật "Hiển thị"</li>
+                <li>Nội dung sẽ tự động xuất hiện trên trang chủ và trang chi tiết</li>
+            </ul>
+        </div>
+
+        <div class="info" style="margin-top: 20px; background: #fef3c7; border-left-color: #f59e0b;">
+            <h4 style="color: #92400e;">⚠️ Lưu ý quan trọng:</h4>
+            <ul>
+                <li style="color: #78350f;">Chạy lệnh: <code>npx prisma generate</code> để cập nhật database</li>
+                <li style="color: #78350f;">Nếu server đang chạy, restart lại: <code>npm run dev</code></li>
+                <li style="color: #78350f;">Upload hình ảnh thiết bị vào thư mục public/images/equipment/</li>
+            </ul>
+        </div>
+
+        <a href="/admin/dashboard" class="btn">Vào Admin Panel →</a>
+    </div>
+</body>
+</html>

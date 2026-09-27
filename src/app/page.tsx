@@ -2,7 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { FAQSection } from "@/components/FAQ";
+import { BackToTop } from "@/components/BackToTop";
+import TestCategoriesSection from "@/components/TestCategoriesSection";
+import EquipmentSection from "@/components/EquipmentSection";
 import { prisma } from "@/lib/prisma";
+import { STATS, COMPANY } from "@/lib/constants";
 
 // Force dynamic rendering - tránh lỗi prerender trên Vercel
 export const dynamic = "force-dynamic";
@@ -88,8 +93,8 @@ export default async function HomePage() {
               </h2>
               <p className="text-lg text-primary-100 mb-8 leading-relaxed animate-fade-up">
                 Đơn vị tư vấn xây dựng hàng đầu với{" "}
-                <strong className="text-secondary-300">hơn 10 năm kinh nghiệm</strong> trong lĩnh vực
-                Thí nghiệm, Kiểm định, Giám sát và Tư vấn xây dựng tại Hà Nội và các tỉnh phía Bắc.
+                <strong className="text-secondary-300">hơn {STATS.experience.replace('+', '')} năm kinh nghiệm</strong> trong lĩnh vực
+                Thí nghiệm, Kiểm định, Giám sát và Tư vấn xây dựng trong và ngoài nước.
               </p>
               <div className="flex flex-wrap gap-4 animate-fade-up">
                 <Link href="/lien-he" className="btn-primary !bg-secondary-500 hover:!bg-secondary-600 !text-white">
@@ -113,10 +118,10 @@ export default async function HomePage() {
           <div className="container-custom">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-white">
               {[
-                { num: "10+", label: "Năm kinh nghiệm", icon: Award },
-                { num: "1000+", label: "Công trình", icon: Building2 },
-                { num: "50+", label: "Kỹ sư chuyên gia", icon: Users },
-                { num: "100+", label: "Chỉ tiêu TN", icon: FlaskConical },
+                { num: STATS.experience, label: "Năm kinh nghiệm", icon: Award },
+                { num: STATS.projects, label: "Công trình", icon: Building2 },
+                { num: STATS.engineers, label: "Kỹ sư chuyên gia", icon: Users },
+                { num: STATS.testParameters, label: "Chỉ tiêu TN", icon: FlaskConical },
               ].map((stat, i) => (
                 <div key={i} className="text-center group cursor-default">
                   <stat.icon className="w-10 h-10 mx-auto mb-3 opacity-80 group-hover:scale-110 transition-transform" />
@@ -146,7 +151,7 @@ export default async function HomePage() {
                       <TrendingUp className="w-8 h-8 text-white" />
                     </div>
                     <div>
-                      <div className="text-3xl font-extrabold text-primary-600">10+</div>
+                      <div className="text-3xl font-extrabold text-primary-600">{STATS.experience}</div>
                       <div className="text-sm text-gray-600">Năm kinh nghiệm uy tín</div>
                     </div>
                   </div>
@@ -165,7 +170,7 @@ export default async function HomePage() {
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   <strong className="text-gray-900">Công ty CP Xây dựng Thanh Chương</strong> với văn phòng đại diện đặt tại
                   Hà Nội, Bắc Ninh, Lạng Sơn. Chúng tôi tự hào là đơn vị tư vấn xây dựng chuyên nghiệp,
-                  đã tham gia <strong className="text-primary-600">hơn 1.000 công trình</strong> lớn nhỏ trên cả nước.
+                  đã tham gia <strong className="text-primary-600">hơn {STATS.projects.replace('+', '')} công trình</strong> lớn nhỏ trên cả nước.
                 </p>
                 <ul className="space-y-3 mb-8">
                   {[
@@ -298,6 +303,12 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* DANH MỤC CHỈ TIÊU PHÉP THỬ */}
+        <TestCategoriesSection />
+
+        {/* TRANG THIẾT BỊ HIỆN ĐẠI */}
+        <EquipmentSection />
+
         {/* TẠI SAO CHỌN CHÚNG TÔI */}
         <section className="py-20 bg-primary-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-5">
@@ -345,9 +356,9 @@ export default async function HomePage() {
               Liên hệ ngay với chúng tôi để được tư vấn miễn phí và nhận báo giá chi tiết trong vòng 24h
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="tel:0939688669" className="btn-primary !bg-white !text-primary-900 hover:!bg-primary-50">
+              <a href={`tel:${COMPANY.contact.hotline}`} className="btn-primary !bg-white !text-primary-900 hover:!bg-primary-50">
                 <Phone className="w-5 h-5" />
-                Gọi 0939.688.669
+                Gọi {COMPANY.contact.hotline}
               </a>
               <Link
                 href="/lien-he"
@@ -409,19 +420,23 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ SECTION */}
+        <FAQSection />
       </main>
 
       <Footer />
+      <BackToTop />
 
       {/* Floating Contact Buttons */}
-      <div className="fixed right-4 bottom-4 z-50 flex flex-col gap-3">
-        <a href="tel:0939688669" className="w-14 h-14 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-primary-700 transition-all hover:scale-110" title="Gọi ngay">
+      <div className="fixed right-4 bottom-4 z-40 flex flex-col gap-3">
+        <a href={`tel:${COMPANY.contact.hotline}`} className="w-14 h-14 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-primary-700 transition-all hover:scale-110" title="Gọi ngay">
           <Phone className="w-6 h-6" />
         </a>
-        <a href="mailto:Thanhchuong.jsc@gmail.com" className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-red-700 transition-all hover:scale-110" title="Gửi email">
+        <a href={`mailto:${COMPANY.contact.email}`} className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-red-700 transition-all hover:scale-110" title="Gửi email">
           <Mail className="w-6 h-6" />
         </a>
-        <a href="#" className="w-14 h-14 bg-cyan-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-cyan-700 transition-all hover:scale-110" title="Chat Zalo">
+        <a href={COMPANY.social.zalo} target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-cyan-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-cyan-700 transition-all hover:scale-110" title="Chat Zalo">
           <MessageCircle className="w-6 h-6" />
         </a>
       </div>

@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -82,4 +82,52 @@ model Contact {
   message   String
   status    String   @default("new") // new | read | replied
   createdAt DateTime @default(now())
+}
+
+// TestCategory - Danh mục chỉ tiêu phép thử
+model TestCategory {
+  id          String   @id @default(cuid())
+  title       String   // Tên danh mục: "Thí nghiệm đất", "Thí nghiệm bê tông", ...
+  slug        String   @unique
+  description String?
+  icon        String   @default("flask-conical") // Lucide icon name
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tests       Test[]
+}
+
+// Test - Chỉ tiêu phép thử
+model Test {
+  id          String       @id @default(cuid())
+  categoryId  String
+  category    TestCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String       // Tên phép thử
+  standard    String?      // Tiêu chuẩn: TCVN, ASTM, ...
+  description String?
+  order       Int          @default(0)
+  published   Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// Equipment - Trang thiết bị
+model Equipment {
+  id           String   @id @default(cuid())
+  name         String   // Tên thiết bị
+  slug         String   @unique
+  model        String?  // Model/số hiệu
+  manufacturer String?  // Nhà sản xuất
+  origin       String?  // Xuất xứ
+  year         Int?     // Năm sản xuất
+  description  String?
+  specs        String?  // Thông số kỹ thuật (JSON hoặc text)
+  image        String?
+  category     String?  // "Thí nghiệm đất", "Thí nghiệm bê tông", ...
+  order        Int      @default(0)
+  featured     Boolean  @default(false)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

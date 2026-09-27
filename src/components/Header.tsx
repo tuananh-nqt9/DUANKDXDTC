@@ -12,11 +12,11 @@ export function TopBar() {
         <div className="flex items-center gap-6">
           <span className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary-400" />
-            Xóm Lai, thôn Phù Dực 1, Xã Phù Đổng, TP. Hà Nội
+            Xóm Lai, thôn Phù Dực 1, xã Phù Đổng, thành phố Hà Nội
           </span>
         </div>
         <div className="flex items-center gap-6">
-          <a href="tel:0939688669" className="flex items-center gap-2 hover:text-primary-400 transition-colors">
+          <a href="tel:09396886699" className="flex items-center gap-2 hover:text-primary-400 transition-colors">
             <Phone className="w-4 h-4" />
             Hotline: <strong className="text-primary-300">0939.688.669</strong>
           </a>
