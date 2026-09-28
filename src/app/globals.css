@@ -29,12 +29,15 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium 
     hover:bg-primary-700 transition-all duration-300 shadow-lg hover:shadow-neon-red hover:-translate-y-1 
-    active:scale-95 relative overflow-hidden group;
+    active:scale-95 relative overflow-hidden;
   }
   .btn-primary::before {
     content: '';
     @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full 
-    group-hover:translate-x-full transition-transform duration-700;
+    transition-transform duration-700;
+  }
+  .btn-primary:hover::before {
+    @apply translate-x-full;
   }
   
   .btn-secondary {
@@ -51,12 +54,15 @@
   /* Enhanced Cards with glassmorphism */
   .card {
     @apply bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden 
-    hover:-translate-y-2 border border-gray-100 relative group;
+    hover:-translate-y-2 border border-gray-100 relative;
   }
   .card::before {
     content: '';
     @apply absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-secondary-50/30 
-    opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none;
+    opacity-0 transition-opacity duration-500 pointer-events-none;
+  }
+  .card:hover::before {
+    @apply opacity-100;
   }
   
   /* Glass Card - Modern glassmorphism effect */
