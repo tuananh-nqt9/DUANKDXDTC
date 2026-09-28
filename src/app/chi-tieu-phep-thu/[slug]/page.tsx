@@ -82,6 +82,38 @@ export default async function TestCategoryDetailPage({ params }: PageProps) {
         {/* Tests List */}
         <section className="py-16 bg-gray-50">
           <div className="container-custom">
+            {/* PDF Viewer */}
+            {category.pdfUrl && (
+              <div className="max-w-6xl mx-auto mb-12">
+                <div className="card p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <FileText className="w-6 h-6 text-primary-600" />
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Tài liệu chi tiết
+                    </h2>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg overflow-hidden" style={{ height: '800px' }}>
+                    <iframe
+                      src={category.pdfUrl}
+                      className="w-full h-full"
+                      title={`${category.title} - Tài liệu PDF`}
+                    />
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <a
+                      href={category.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>Tải xuống PDF</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {category.tests.length === 0 ? (
               <div className="text-center py-20 card">
                 <FlaskConical className="w-20 h-20 text-gray-300 mx-auto mb-4" />

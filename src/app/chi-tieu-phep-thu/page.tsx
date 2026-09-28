@@ -4,7 +4,7 @@ import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { prisma } from "@/lib/prisma";
-import { FlaskConical, TestTube, ArrowRight, FileText, Shield } from "lucide-react";
+import { FlaskConical, TestTube, ArrowRight, FileText, Shield, Download } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +105,98 @@ export default async function TestCategoriesPage() {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* PDF Documents Section - Giống website cũ */}
+        <section className="py-16 bg-white">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Danh mục chỉ tiêu & phép thử
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Tải về hoặc xem trực tiếp danh sách đầy đủ các chỉ tiêu phép thử của phòng thí nghiệm
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* PDF 1 */}
+              <div className="card p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-6 h-6 text-red-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900 mb-1">
+                      Danh mục chỉ tiêu phép thử (Tập 1)
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Các phép thử cơ bản về đất, bê tông, xi măng
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-100 rounded-lg overflow-hidden mb-4" style={{ height: '400px' }}>
+                  <iframe
+                    src="/documents/danh-muc-phep-thu-1.pdf"
+                    className="w-full h-full"
+                    title="Danh mục chỉ tiêu phép thử 1"
+                  />
+                </div>
+
+                <a
+                  href="/documents/danh-muc-phep-thu-1.pdf"
+                  download
+                  className="btn-primary w-full justify-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Download className="w-4 h-4" />
+                  Tải về PDF (Tập 1)
+                </a>
+              </div>
+
+              {/* PDF 2 */}
+              <div className="card p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900 mb-1">
+                      Danh mục chỉ tiêu phép thử (Tập 2)
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Các phép thử nâng cao về nền móng, kiểm định công trình
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gray-100 rounded-lg overflow-hidden mb-4" style={{ height: '400px' }}>
+                  <iframe
+                    src="/documents/danh-muc-phep-thu-2.pdf"
+                    className="w-full h-full"
+                    title="Danh mục chỉ tiêu phép thử 2"
+                  />
+                </div>
+
+                <a
+                  href="/documents/danh-muc-phep-thu-2.pdf"
+                  download
+                  className="btn-primary w-full justify-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Download className="w-4 h-4" />
+                  Tải về PDF (Tập 2)
+                </a>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <p className="text-sm text-gray-500">
+                Nếu không xem được PDF trực tiếp, vui lòng tải về để xem
+              </p>
+            </div>
           </div>
         </section>
 

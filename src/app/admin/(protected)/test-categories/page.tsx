@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, FileText, CheckCircle, XCircle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +44,9 @@ export default async function TestCategoriesPage() {
                 Số phép thử
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                PDF
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Trạng thái
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
@@ -63,6 +66,24 @@ export default async function TestCategoriesPage() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {category._count.tests} phép thử
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {category.pdfUrl ? (
+                    <a
+                      href={category.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      <span>Có PDF</span>
+                    </a>
+                  ) : (
+                    <span className="flex items-center gap-1 text-gray-400">
+                      <XCircle className="w-4 h-4" />
+                      <span>Chưa có</span>
+                    </span>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span

@@ -13,6 +13,7 @@ export default function NewTestCategoryPage() {
     slug: "",
     description: "",
     icon: "flask-conical",
+    pdfUrl: "",
     order: 0,
     published: true,
   });
@@ -127,6 +128,22 @@ export default function NewTestCategoryPage() {
               >
                 lucide.dev
               </a>
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Link file PDF
+            </label>
+            <input
+              type="text"
+              value={formData.pdfUrl}
+              onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              placeholder="/documents/danh-muc-phep-thu.pdf"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Upload file PDF vào thư mục <code className="bg-gray-100 px-1 rounded">public/documents/</code> rồi điền đường dẫn vào đây
             </p>
           </div>
 

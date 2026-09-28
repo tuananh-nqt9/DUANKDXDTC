@@ -33,6 +33,7 @@ export async function POST(req: Request) {
         slug: data.slug,
         description: data.description || null,
         icon: data.icon || "flask-conical",
+        pdfUrl: data.pdfUrl || null,
         order: data.order || 0,
         published: data.published ?? true,
       },
