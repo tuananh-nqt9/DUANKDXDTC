@@ -22,18 +22,19 @@ export default async function ProjectsPage() {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dự án</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Khách hàng</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Địa điểm</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Năm</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Nổi bật</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Hiển thị</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Thao tác</th>
-            </tr>
-          </thead>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Dự án</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Khách hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Địa điểm</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Năm</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Nổi bật</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Hiển thị</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap">Thao tác</th>
+              </tr>
+            </thead>
           <tbody className="divide-y divide-gray-200">
             {projects.length === 0 ? (
               <tr><td colSpan={7} className="px-6 py-12 text-center text-gray-500">Chưa có dự án nào.</td></tr>
@@ -68,6 +69,7 @@ export default async function ProjectsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
