@@ -125,13 +125,13 @@ export default function ImageUpload({
         Hoặc nhập URL trực tiếp:
       </p>
       <input
-        type="url"
+        type="text"
         value={imageUrl}
         onChange={(e) => {
           setImageUrl(e.target.value);
           onChange?.(e.target.value);
         }}
-        placeholder="https://..."
+        placeholder="https://... hoặc /uploads/images/..."
         className="form-input mt-1"
       />
     </div>
