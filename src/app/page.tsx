@@ -57,22 +57,22 @@ export default async function HomePage() {
 
       <main className="flex-1">
         {/* HERO SECTION - Enhanced with modern effects */}
-        <section className="relative bg-gradient-animated text-white py-20 md:py-32 overflow-hidden noise-overlay">
+        <section className="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white py-20 md:py-32 overflow-hidden">
+          {/* Red gradient overlay - stronger */}
+          <div className="absolute inset-0 bg-gradient-to-r from-red-900/60 via-primary-700/70 to-red-800/60" />
+
           {/* Animated Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.15] bg-grid-pattern" />
+          <div className="absolute inset-0 opacity-[0.08] bg-grid-pattern" />
 
-          {/* Gradient Mesh Overlay */}
-          <div className="absolute inset-0 bg-gradient-mesh opacity-40" />
-
-          {/* Background image overlay with parallax effect */}
-          <div className="absolute inset-0 opacity-20 mix-blend-overlay">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920')] bg-cover bg-center bg-fixed" />
+          {/* Background image overlay - darker and more blended */}
+          <div className="absolute inset-0 opacity-10 mix-blend-multiply">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920')] bg-cover bg-center bg-fixed grayscale" />
           </div>
 
-          {/* Floating orbs with enhanced animations */}
-          <div className="absolute top-20 right-10 w-96 h-96 bg-primary-400 rounded-full blur-3xl opacity-20 animate-float-slow" />
-          <div className="absolute bottom-20 left-10 w-80 h-80 bg-secondary-400 rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "1.5s" }} />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-electric-400 rounded-full blur-3xl opacity-10 animate-float" style={{ animationDelay: "0.5s" }} />
+          {/* Floating orbs with RED tones */}
+          <div className="absolute top-20 right-10 w-96 h-96 bg-red-600 rounded-full blur-3xl opacity-20 animate-float-slow" />
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-red-500 rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "1.5s" }} />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-orange-600 rounded-full blur-3xl opacity-10 animate-float" style={{ animationDelay: "0.5s" }} />
 
           {/* Scanline effect */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.02]">
