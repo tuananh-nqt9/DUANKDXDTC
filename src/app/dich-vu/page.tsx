@@ -9,6 +9,7 @@ import {
   ArrowRight, CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   FlaskConical, ClipboardCheck, Mountain, HardHat, Activity, MountainSnow,
@@ -38,19 +39,32 @@ export default async function ServicesPage() {
               {services.map((service) => {
                 const IconComp = iconMap[service.icon] || FlaskConical;
                 return (
-                  <div key={service.id} className="card p-6 group">
-                    <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-600 transition-colors">
-                      <IconComp className="w-7 h-7 text-primary-600 group-hover:text-white transition-colors" />
+                  <div key={service.id} className="card overflow-hidden group">
+                    {service.image ? (
+                      <div className="relative h-48 w-full">
+                        <Image 
+                          src={service.image} 
+                          alt={service.title} 
+                          fill 
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
+                        <IconComp className="w-16 h-16 text-primary-600" />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                      <p className="text-gray-600 mb-4 text-sm">{service.excerpt}</p>
+                      <ul className="space-y-1 mb-4 text-sm text-gray-600">
+                        <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 mt-0.5" /> Đạt chuẩn quốc gia</li>
+                        <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 mt-0.5" /> Đội ngũ chuyên gia</li>
+                      </ul>
+                      <Link href={`/dich-vu/${service.slug}`} className="text-primary-600 font-medium text-sm inline-flex items-center gap-1 hover:gap-2 transition-all">
+                        Chi tiết <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4 text-sm">{service.excerpt}</p>
-                    <ul className="space-y-1 mb-4 text-sm text-gray-600">
-                      <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 mt-0.5" /> Đạt chuẩn quốc gia</li>
-                      <li className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 mt-0.5" /> Đội ngũ chuyên gia</li>
-                    </ul>
-                    <Link href={`/dich-vu/${service.slug}`} className="text-primary-600 font-medium text-sm inline-flex items-center gap-1 hover:gap-2 transition-all">
-                      Chi tiết <ArrowRight className="w-4 h-4" />
-                    </Link>
                   </div>
                 );
               })}
