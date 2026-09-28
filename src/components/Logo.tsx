@@ -18,7 +18,7 @@ export default function Logo({ variant = "full", className = "", theme = "light"
           alt="THANH CHƯƠNG JSC Logo"
           width={56}
           height={56}
-          className="drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
+          className="rounded-full drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
           priority
           quality={100}
         />
