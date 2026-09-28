@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   description: SEO.description,
   keywords: SEO.keywords,
   authors: [{ name: COMPANY.shortName }],
+  icons: {
+    icon: [
+      { url: "/images/logo-thanhchuong.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/logo-thanhchuong.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/images/logo-thanhchuong.png",
+  },
   openGraph: {
     title: SEO.defaultTitle,
     description: SEO.description,
@@ -17,11 +24,20 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     url: COMPANY.contact.website,
     siteName: COMPANY.shortName,
+    images: [
+      {
+        url: "/images/logo-thanhchuong.png",
+        width: 1200,
+        height: 630,
+        alt: "THANH CHƯƠNG JSC - Phòng Thí Nghiệm LAS-XD 795",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SEO.defaultTitle,
     description: SEO.description,
+    images: ["/images/logo-thanhchuong.png"],
   },
   robots: {
     index: true,
@@ -55,6 +71,8 @@ export default function RootLayout({
               name: COMPANY.name,
               alternateName: COMPANY.shortName,
               url: COMPANY.contact.website,
+              logo: `${COMPANY.contact.website}/images/logo-thanhchuong.png`,
+              image: `${COMPANY.contact.website}/images/logo-thanhchuong.png`,
               email: COMPANY.contact.email,
               telephone: COMPANY.contact.hotline,
               address: {
