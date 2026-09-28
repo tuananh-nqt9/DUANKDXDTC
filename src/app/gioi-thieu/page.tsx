@@ -1,8 +1,11 @@
+import Link from "next/link";
+import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { BackToTop } from "@/components/BackToTop";
+import { DownloadLink } from "@/components/DownloadButton";
 import { Award, Users, Building2, FlaskConical, CheckCircle, Shield, Target, Lightbulb, TrendingUp, Download, FileText } from "lucide-react";
 import { COMPANY, STATS, TEAM_MEMBERS } from "@/lib/constants";
-import Image from "next/image";
 
 export default function AboutPage() {
   return (
@@ -202,66 +205,34 @@ export default function AboutPage() {
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                {
-                  title: "Hồ sơ năng lực công ty",
-                  description: "Profile tổng quan về THANH CHƯƠNG JSC",
-                  file: "/documents/ho-so-nang-luc.pdf",
-                  size: "2.5 MB",
-                  icon: FileText,
-                },
-                {
-                  title: "Giới thiệu phòng thí nghiệm",
-                  description: "Thông tin chi tiết về PTN LAS-XD 795",
-                  file: "/documents/phong-thi-nghiem.pdf",
-                  size: "1.8 MB",
-                  icon: FlaskConical,
-                },
-                {
-                  title: "Chứng chỉ & Giấy phép",
-                  description: "Các chứng chỉ hành nghề và công nhận",
-                  file: "/documents/chung-chi.pdf",
-                  size: "3.2 MB",
-                  icon: Award,
-                },
-                {
-                  title: "Danh mục dịch vụ",
-                  description: "Bảng giá và dịch vụ chi tiết",
-                  file: "/documents/danh-muc-dich-vu.pdf",
-                  size: "1.5 MB",
-                  icon: CheckCircle,
-                },
-              ].map((doc, i) => (
-                <a
-                  key={i}
-                  href={doc.file}
-                  download
-                  className="group bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary-500 hover:shadow-lg transition-all"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary-600 transition-colors">
-                      <doc.icon className="w-7 h-7 text-primary-600 group-hover:text-white transition-colors" />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
-                        {doc.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-3">{doc.description}</p>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                          PDF • {doc.size}
-                        </span>
-                        <div className="flex items-center gap-2 text-primary-600 font-semibold text-sm group-hover:gap-3 transition-all">
-                          <Download className="w-4 h-4" />
-                          <span>Tải về</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
+              <DownloadLink
+                href="/documents/ho-so-nang-luc.pdf"
+                title="Hồ sơ năng lực công ty"
+                description="Profile tổng quan về THANH CHƯƠNG JSC"
+                iconName="FileText"
+                size="2.5 MB"
+              />
+              <DownloadLink
+                href="/documents/phong-thi-nghiem.pdf"
+                title="Giới thiệu phòng thí nghiệm"
+                description="Thông tin chi tiết về PTN LAS-XD 795"
+                iconName="FlaskConical"
+                size="1.8 MB"
+              />
+              <DownloadLink
+                href="/documents/chung-chi.pdf"
+                title="Chứng chỉ & Giấy phép"
+                description="Các chứng chỉ hành nghề và công nhận"
+                iconName="Award"
+                size="3.2 MB"
+              />
+              <DownloadLink
+                href="/documents/danh-muc-dich-vu.pdf"
+                title="Danh mục dịch vụ"
+                description="Bảng giá và dịch vụ chi tiết"
+                iconName="CheckCircle"
+                size="1.5 MB"
+              />
             </div>
 
             <div className="mt-8 p-6 bg-primary-50 border border-primary-200 rounded-xl">

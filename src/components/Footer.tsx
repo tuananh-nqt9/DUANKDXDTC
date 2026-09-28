@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { Phone, Mail, MapPin, Facebook, Youtube, MessageCircle, ArrowRight, Clock, FileText } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Youtube, ArrowRight, Clock, FileText } from "lucide-react";
+import { ZaloIcon } from "@/components/icons/ZaloIcon";
 import { COMPANY } from "@/lib/constants";
 
 export function Footer() {
@@ -14,12 +15,12 @@ export function Footer() {
   ];
 
   const services = [
-    { href: "/dich-vu/thi-nghiem-vat-lieu", label: "Thí nghiệm vật liệu XD" },
-    { href: "/dich-vu/kiem-dinh-chat-luong", label: "Kiểm định chất lượng" },
-    { href: "/dich-vu/thi-nghiem-nen-mong", label: "Thí nghiệm nền móng" },
-    { href: "/dich-vu/tu-van-giam-sat", label: "Tư vấn giám sát" },
-    { href: "/dich-vu/quan-trac-cong-trinh", label: "Quan trắc công trình" },
-    { href: "/dich-vu/khao-sat-dia-chat", label: "Khảo sát địa chất" },
+    { href: "/dich-vu/thi-nghiem-vat-lieu", label: "Thí nghiệm Vật liệu Xây dựng" },
+    { href: "/dich-vu/kiem-dinh-chat-luong", label: "Kiểm định Chất lượng Công trình" },
+    { href: "/dich-vu/thi-nghiem-nen-mong", label: "Thí nghiệm Nền móng" },
+    { href: "/dich-vu/tu-van-giam-sat", label: "Tư vấn Giám sát Thi công" },
+    { href: "/dich-vu/quan-trac-cong-trinh", label: "Quan trắc Công trình" },
+    { href: "/dich-vu/khao-sat-dia-chat", label: "Khảo sát Địa chất Công trình" },
   ];
 
   return (
@@ -72,10 +73,10 @@ export function Footer() {
                 href={COMPANY.social.zalo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-cyan-600/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-cyan-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon-cyan group"
+                className="w-10 h-10 bg-[#0068FF]/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-[#0068FF] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group"
                 title="Chat Zalo"
               >
-                <MessageCircle className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-300" />
+                <ZaloIcon className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-300" />
               </a>
             </div>
 

@@ -1,0 +1,97 @@
+# ========================================
+# HƯỚNG DẪN DEPLOY NHANH - TÍNH NĂNG PDF
+# ========================================
+
+# Cách 1: Chạy script tự động (KHUYẾN NGHỊ)
+# -----------------------------------------
+ssh root@103.173.228.174 << 'ENDSSH'
+cd /var/www/DUANKDXDTC
+git pull origin main
+bash deploy-pdf.sh
+ENDSSH
+
+
+# Cách 2: Chạy từng lệnh thủ công
+# -----------------------------------------
+ssh root@103.173.228.174
+
+# Sau đó paste từng lệnh này:
+
+cd /var/www/DUANKDXDTC
+
+# Backup .env
+cp .env .env.backup
+
+# Stash nếu có thay đổi
+git stash
+
+# Pull code mới
+git pull origin main
+
+# Restore .env
+mv .env.backup .env
+
+# Chạy migration
+npx prisma migrate deploy
+npx prisma generate
+
+# Tạo thư mục documents
+mkdir -p public/documents
+chmod 755 public/documents
+
+# Build
+npm run build
+
+# Restart PM2
+pm2 list
+pm2 restart kdxd || pm2 restart all
+pm2 save
+
+echo ""
+echo "✅ Deploy hoàn tất!"
+echo "🌐 Kiểm tra: https://kdxdthanhchuong.vn/chi-tieu-phep-thu"
+
+
+# ========================================
+# UPLOAD FILE PDF
+# ========================================
+
+# Cách 1: Upload qua SCP (từ Windows PowerShell)
+# -----------------------------------------
+scp "D:\path\to\file.pdf" root@103.173.228.174:/var/www/DUANKDXDTC/public/documents/
+
+# Ví dụ:
+scp "D:\Documents\thi-nghiem-be-tong.pdf" root@103.173.228.174:/var/www/DUANKDXDTC/public/documents/
+
+
+# Cách 2: Upload qua WinSCP/FileZilla
+# -----------------------------------------
+# Host: 103.173.228.174
+# Port: 22
+# User: root
+# Path: /var/www/DUANKDXDTC/public/documents/
+
+
+# ========================================
+# CẬP NHẬT LINK PDF TRONG ADMIN
+# ========================================
+
+# 1. Đăng nhập: https://kdxdthanhchuong.vn/admin/login
+# 2. Vào "Danh mục phép thử"
+# 3. Edit danh mục muốn thêm PDF
+# 4. Điền link PDF: /documents/ten-file.pdf
+# 5. Lưu
+
+
+# ========================================
+# KIỂM TRA KẾT QUẢ
+# ========================================
+
+# Xem danh sách PDF đã upload:
+ssh root@103.173.228.174 "ls -lh /var/www/DUANKDXDTC/public/documents/"
+
+# Xem PM2 status:
+ssh root@103.173.228.174 "pm2 status"
+
+# Xem logs (nếu có lỗi):
+ssh root@103.173.228.174 "pm2 logs kdxd --lines 50"

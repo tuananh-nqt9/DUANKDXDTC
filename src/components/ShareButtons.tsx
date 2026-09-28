@@ -5,7 +5,8 @@
 
 'use client';
 
-import { Facebook, Twitter, Linkedin, Link2, Mail, MessageCircle } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Link2, Mail } from "lucide-react";
+import { ZaloIcon } from "@/components/icons/ZaloIcon";
 import { useState } from "react";
 
 interface ShareButtonsProps {
@@ -78,10 +79,10 @@ export function ShareButtons({ url, title, description = "", className = "" }: S
         href={shareLinks.zalo}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-9 h-9 rounded-full bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center transition-all hover:scale-110"
+        className="w-9 h-9 rounded-full bg-[#0068FF] hover:bg-[#0052CC] text-white flex items-center justify-center transition-all hover:scale-110"
         title="Chia sẻ qua Zalo"
       >
-        <MessageCircle className="w-4 h-4" />
+        <ZaloIcon className="w-4 h-4" />
       </a>
 
       {/* Email */}

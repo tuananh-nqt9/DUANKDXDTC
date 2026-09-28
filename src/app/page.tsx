@@ -6,6 +6,7 @@ import { FAQSection } from "@/components/FAQ";
 import { BackToTop } from "@/components/BackToTop";
 import TestCategoriesSection from "@/components/TestCategoriesSection";
 import EquipmentSection from "@/components/EquipmentSection";
+import { ZaloIcon } from "@/components/icons/ZaloIcon";
 import { prisma } from "@/lib/prisma";
 import { STATS, COMPANY } from "@/lib/constants";
 
@@ -14,7 +15,6 @@ export const dynamic = "force-dynamic";
 import {
   Phone,
   Mail,
-  MessageCircle,
   Award,
   Users,
   Building2,
@@ -110,7 +110,7 @@ export default async function HomePage() {
 
               <div className="flex flex-wrap gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
                 <Link href="/lien-he" className="btn-primary !bg-secondary-500 hover:!bg-secondary-600 !text-white !shadow-neon-cyan group">
-                  <MessageCircle className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                  <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                   Yêu cầu tư vấn
                 </Link>
                 <Link
@@ -478,7 +478,7 @@ export default async function HomePage() {
             <div className="max-w-4xl mx-auto">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 border border-white/20 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
-                <MessageCircle className="w-4 h-4 text-secondary-300" />
+                <Phone className="w-4 h-4 text-secondary-300" />
                 Liên hệ tư vấn miễn phí
               </div>
               
@@ -653,10 +653,13 @@ export default async function HomePage() {
       </main>
 
       <Footer />
-      <BackToTop />
 
-      {/* Enhanced Floating Contact Buttons */}
+      {/* Enhanced Floating Contact Buttons - Bao gồm cả nút Back to Top */}
       <div className="fixed right-4 md:right-6 bottom-4 md:bottom-6 z-50 flex flex-col gap-3">
+        {/* Back to Top Button */}
+        <BackToTop />
+        
+        {/* Phone Button */}
         <a 
           href={`tel:${COMPANY.contact.hotline}`} 
           className="group relative w-14 h-14 md:w-16 md:h-16 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-neon-red hover:shadow-neon-red transition-all duration-300 hover:scale-110 active:scale-95 animate-fade-in"
@@ -694,14 +697,14 @@ export default async function HomePage() {
           href={COMPANY.social.zalo} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="group relative w-14 h-14 md:w-16 md:h-16 bg-cyan-600 rounded-full flex items-center justify-center text-white shadow-neon-cyan hover:shadow-neon-cyan transition-all duration-300 hover:scale-110 active:scale-95 animate-fade-in"
+          className="group relative w-14 h-14 md:w-16 md:h-16 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 animate-fade-in"
           style={{ animationDelay: "0.2s" }}
           title="Chat Zalo"
         >
           {/* Pulse ring */}
-          <span className="absolute inset-0 rounded-full bg-cyan-400 animate-ping opacity-20" style={{ animationDelay: "0.5s" }} />
+          <span className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-20" style={{ animationDelay: "0.5s" }} />
           
-          <MessageCircle className="w-6 h-6 md:w-7 md:h-7 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+          <ZaloIcon className="w-7 h-7 md:w-8 md:h-8 relative z-10 group-hover:scale-110 transition-transform duration-300" />
           
           <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
             Chat Zalo

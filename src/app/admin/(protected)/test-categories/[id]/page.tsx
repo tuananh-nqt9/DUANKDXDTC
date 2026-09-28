@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import Link from "next/link";
 
-export default function NewTestCategoryPage() {
+export default function EditTestCategoryPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -18,6 +19,31 @@ export default function NewTestCategoryPage() {
     order: 0,
     published: true,
   });
+
+  useEffect(() => {
+    fetchCategory();
+  }, [params.id]);
+
+  const fetchCategory = async () => {
+    try {
+      const res = await fetch(`/api/admin/test-categories/${params.id}`);
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      setFormData({
+        title: data.title || "",
+        slug: data.slug || "",
+        description: data.description || "",
+        icon: data.icon || "flask-conical",
+        pdfUrl: data.pdfUrl || "",
+        order: data.order || 0,
+        published: data.published ?? true,
+      });
+    } catch (error) {
+      alert("Không thể tải dữ liệu");
+    } finally {
+      setFetching(false);
+    }
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -59,13 +85,13 @@ export default function NewTestCategoryPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/admin/test-categories", {
-        method: "POST",
+      const res = await fetch(`/api/admin/test-categories/${params.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Tạo danh mục thất bại");
+      if (!res.ok) throw new Error("Cập nhật danh mục thất bại");
 
       router.push("/admin/test-categories");
       router.refresh();
@@ -88,6 +114,17 @@ export default function NewTestCategoryPage() {
       .trim();
   };
 
+  if (fetching) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -98,7 +135,7 @@ export default function NewTestCategoryPage() {
           <ArrowLeft className="w-4 h-4" />
           Quay lại
         </Link>
-        <h1 className="text-2xl font-bold">Thêm danh mục phép thử</h1>
+        <h1 className="text-2xl font-bold">Chỉnh sửa danh mục phép thử</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-2xl bg-white rounded-lg shadow p-6">
@@ -253,7 +290,7 @@ export default function NewTestCategoryPage() {
             disabled={loading}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
           >
-            {loading ? "Đang lưu..." : "Tạo danh mục"}
+            {loading ? "Đang lưu..." : "Cập nhật"}
           </button>
           <Link
             href="/admin/test-categories"

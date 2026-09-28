@@ -37,10 +37,16 @@ export function BackToTop() {
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+          className="w-14 h-14 md:w-16 md:h-16 bg-slate-700 hover:bg-slate-600 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95 group animate-fade-in"
+          style={{ animationDelay: "0.3s" }}
           aria-label="Cuộn lên đầu trang"
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-6 h-6 md:w-7 md:h-7 group-hover:-translate-y-1 transition-transform duration-300" />
+          
+          {/* Tooltip */}
+          <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+            Lên đầu trang
+          </span>
         </button>
       )}
     </>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
+import { DownloadButton } from "@/components/DownloadButton";
 import { prisma } from "@/lib/prisma";
 import { FlaskConical, TestTube, ArrowRight, FileText, Shield, Download } from "lucide-react";
 
@@ -145,15 +146,13 @@ export default async function TestCategoriesPage() {
                   />
                 </div>
 
-                <a
+                <DownloadButton
                   href="/documents/danh-muc-phep-thu-1.pdf"
-                  download
                   className="btn-primary w-full justify-center"
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <Download className="w-4 h-4" />
                   Tải về PDF (Tập 1)
-                </a>
+                </DownloadButton>
               </div>
 
               {/* PDF 2 */}
@@ -180,15 +179,13 @@ export default async function TestCategoriesPage() {
                   />
                 </div>
 
-                <a
+                <DownloadButton
                   href="/documents/danh-muc-phep-thu-2.pdf"
-                  download
                   className="btn-primary w-full justify-center"
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <Download className="w-4 h-4" />
                   Tải về PDF (Tập 2)
-                </a>
+                </DownloadButton>
               </div>
             </div>
 
