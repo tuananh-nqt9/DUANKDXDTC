@@ -70,8 +70,9 @@ export default async function TestCategoriesPage() {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categories.map((category) => (
-                  <div
+                  <Link
                     key={category.id}
+                    href={`/chi-tieu-phep-thu/${category.slug}`}
                     className="card p-6 group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start gap-4 mb-4">
@@ -100,7 +101,7 @@ export default async function TestCategoriesPage() {
                       </div>
                       <ArrowRight className="w-5 h-5 text-primary-600 group-hover:translate-x-1 transition-transform" />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
