@@ -32,6 +32,7 @@ import {
   Shield,
   Clock,
   TrendingUp,
+  Navigation,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -56,23 +57,23 @@ export default async function HomePage() {
       <Header />
 
       <main className="flex-1">
-        {/* HERO SECTION - Enhanced with modern effects */}
-        <section className="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white py-20 md:py-32 overflow-hidden">
-          {/* Red gradient overlay - stronger */}
-          <div className="absolute inset-0 bg-gradient-to-r from-red-900/60 via-primary-700/70 to-red-800/60" />
+        {/* HERO SECTION - RED THEME */}
+        <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-red-900 text-white py-20 md:py-32 overflow-hidden">
+          {/* Strong red overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-red-900/80 via-red-800/70 to-red-900/80" />
 
           {/* Animated Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.08] bg-grid-pattern" />
+          <div className="absolute inset-0 opacity-[0.06] bg-grid-pattern" />
 
-          {/* Background image overlay - darker and more blended */}
-          <div className="absolute inset-0 opacity-10 mix-blend-multiply">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920')] bg-cover bg-center bg-fixed grayscale" />
+          {/* Background image - completely dark and desaturated */}
+          <div className="absolute inset-0 opacity-5 mix-blend-multiply">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920')] bg-cover bg-center bg-fixed grayscale contrast-50" />
           </div>
 
-          {/* Floating orbs with RED tones */}
-          <div className="absolute top-20 right-10 w-96 h-96 bg-red-600 rounded-full blur-3xl opacity-20 animate-float-slow" />
-          <div className="absolute bottom-20 left-10 w-80 h-80 bg-red-500 rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "1.5s" }} />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-orange-600 rounded-full blur-3xl opacity-10 animate-float" style={{ animationDelay: "0.5s" }} />
+          {/* Floating orbs - PURE RED only */}
+          <div className="absolute top-20 right-10 w-96 h-96 bg-red-700 rounded-full blur-3xl opacity-25 animate-float-slow" />
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-red-600 rounded-full blur-3xl opacity-20 animate-float" style={{ animationDelay: "1.5s" }} />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-red-800 rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "0.5s" }} />
 
           {/* Scanline effect */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.02]">
@@ -562,6 +563,93 @@ export default async function HomePage() {
 
         {/* FAQ SECTION */}
         <FAQSection />
+
+        {/* GOOGLE MAPS - ĐỊA CHỈ VĂN PHÒNG */}
+        <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <span className="text-primary-600 font-semibold uppercase tracking-wider text-sm flex items-center justify-center gap-2 mb-3">
+                <MapPin className="w-4 h-4" />
+                Địa chỉ liên hệ
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Hệ thống văn phòng & phòng thí nghiệm
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Chúng tôi có mặt tại nhiều tỉnh thành, sẵn sàng phục vụ bạn
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              {COMPANY.offices.map((office) => (
+                <div key={office.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                  {/* Map */}
+                  <div className="relative w-full h-80 bg-gray-100 overflow-hidden">
+                    <iframe
+                      src={office.embedUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`Bản đồ ${office.city}`}
+                      className="group-hover:scale-105 transition-transform duration-500"
+                    ></iframe>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="w-14 h-14 bg-gradient-to-br from-primary-600 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <MapPin className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-bold text-2xl text-gray-900">{office.city}</h3>
+                          <span className="text-xs bg-gradient-to-r from-primary-100 to-red-100 text-primary-700 px-3 py-1 rounded-full font-semibold border border-primary-200">
+                            {office.type}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">{office.address}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center">
+                          <Phone className="w-5 h-5 text-primary-600" />
+                        </div>
+                        <a href={`tel:${office.phone}`} className="text-primary-600 hover:text-primary-700 font-semibold text-lg hover:underline">
+                          {office.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1.$2.$3')}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+                          <Clock className="w-5 h-5 text-red-600" />
+                        </div>
+                        <span className="text-gray-600 text-sm">
+                          Thứ 2 - Thứ 6: 8:00 - 17:30
+                        </span>
+                      </div>
+                    </div>
+
+                    <a
+                      href={office.map}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary-600 to-red-600 text-white font-semibold px-6 py-3 rounded-lg hover:shadow-xl transition-all duration-300 group/btn active:scale-95"
+                    >
+                      <Navigation className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                      Xem chỉ đường trên Google Maps
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
