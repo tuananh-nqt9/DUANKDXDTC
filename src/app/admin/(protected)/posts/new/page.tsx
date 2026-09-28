@@ -1,4 +1,5 @@
 import { createPost } from "../actions";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function NewPostPage() {
   return (
@@ -28,10 +29,7 @@ export default function NewPostPage() {
           <p className="text-xs text-gray-500 mt-1">Hỗ trợ HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;img&gt;...</p>
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh đại diện</label>
-          <input type="url" name="image" className="form-input" placeholder="https://..." />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh đại diện" />
 
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="published" defaultChecked className="w-4 h-4 rounded" />

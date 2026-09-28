@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { updateService } from "../actions";
 import { notFound } from "next/navigation";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
@@ -51,10 +52,7 @@ export default async function EditServicePage({
           <textarea name="content" rows={6} defaultValue={service.content || ""} className="form-input font-mono text-sm" />
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh</label>
-          <input type="url" name="image" defaultValue={service.image || ""} className="form-input" />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh dịch vụ" defaultValue={service.image || ""} />
 
         <div className="grid grid-cols-2 gap-4">
           <div>

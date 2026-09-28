@@ -2,6 +2,7 @@ import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
@@ -38,6 +39,18 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
 
         <section className="py-16">
           <div className="container-custom max-w-4xl">
+            {service.image && (
+              <div className="relative h-80 rounded-2xl overflow-hidden mb-8">
+                <Image 
+                  src={service.image} 
+                  alt={service.title} 
+                  fill 
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
+
             {service.excerpt && (
               <p className="text-xl text-gray-700 mb-8 leading-relaxed">{service.excerpt}</p>
             )}

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function NewEquipmentPage() {
   const router = useRouter();
@@ -193,21 +194,12 @@ export default function NewEquipmentPage() {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              URL hình ảnh
-            </label>
-            <input
-              type="text"
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              placeholder="/images/equipment/may-nen-be-tong.jpg"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Upload hình ảnh vào thư mục public/images/equipment/
-            </p>
-          </div>
+          <ImageUpload
+            name="image"
+            label="Hình ảnh thiết bị"
+            defaultValue={formData.image}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+          />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Thứ tự</label>

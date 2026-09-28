@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { createService } from "../actions";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default async function NewServicePage() {
   return (
@@ -40,10 +41,7 @@ export default async function NewServicePage() {
           <textarea name="content" rows={6} className="form-input font-mono text-sm" placeholder="<p>Nội dung chi tiết...</p>" />
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh</label>
-          <input type="url" name="image" className="form-input" placeholder="https://..." />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh dịch vụ" />
 
         <div className="grid grid-cols-2 gap-4">
           <div>

@@ -1,4 +1,5 @@
 import { createProject } from "../actions";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function NewProjectPage() {
   return (
@@ -42,10 +43,7 @@ export default function NewProjectPage() {
           <textarea name="content" rows={6} className="form-input font-mono text-sm" />
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh</label>
-          <input type="url" name="image" className="form-input" placeholder="https://images.unsplash.com/..." />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh dự án" />
 
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 cursor-pointer">

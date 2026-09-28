@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { updateProject } from "../actions";
 import { notFound } from "next/navigation";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
@@ -52,10 +53,7 @@ export default async function EditProjectPage({ params }: { params: { id: string
           <textarea name="content" rows={6} defaultValue={project.content || ""} className="form-input font-mono text-sm" />
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh</label>
-          <input type="url" name="image" defaultValue={project.image || ""} className="form-input" />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh dự án" defaultValue={project.image || ""} />
 
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2 cursor-pointer">

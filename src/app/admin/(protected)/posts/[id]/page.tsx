@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { updatePost } from "../actions";
 import { notFound } from "next/navigation";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
@@ -37,10 +38,7 @@ export default async function EditPostPage({ params }: { params: { id: string } 
           <textarea name="content" required rows={12} defaultValue={post.content} className="form-input font-mono text-sm" />
         </div>
 
-        <div>
-          <label className="form-label">URL hình ảnh đại diện</label>
-          <input type="url" name="image" defaultValue={post.image || ""} className="form-input" />
-        </div>
+        <ImageUpload name="image" label="Hình ảnh đại diện" defaultValue={post.image || ""} />
 
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="published" defaultChecked={post.published} className="w-4 h-4 rounded" />
