@@ -1,25 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Plus, Pencil, Trash2, FileText, CheckCircle, XCircle } from "lucide-react";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { Plus, Pencil, FileText, CheckCircle, XCircle } from "lucide-react";
+import DeleteCategoryButton from "./DeleteCategoryButton";
 
 export const dynamic = "force-dynamic";
-
-async function deleteCategory(formData: FormData) {
-  "use server";
-  const id = formData.get("id") as string;
-  
-  try {
-    await prisma.testCategory.delete({
-      where: { id },
-    });
-    revalidatePath("/admin/test-categories");
-  } catch (error) {
-    console.error("Error deleting category:", error);
-    throw error;
-  }
-}
 
 export default async function TestCategoriesPage() {
   const categories = await prisma.testCategory.findMany({
@@ -123,20 +107,7 @@ export default async function TestCategoriesPage() {
                     >
                       <Pencil className="w-4 h-4" />
                     </Link>
-                    <form action={deleteCategory} onSubmit={(e) => {
-                      if (!confirm('Bạn có chắc muốn xóa danh mục này? Tất cả các phép thử trong danh mục cũng sẽ bị xóa.')) {
-                        e.preventDefault();
-                      }
-                    }}>
-                      <input type="hidden" name="id" value={category.id} />
-                      <button
-                        type="submit"
-                        className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded transition-colors"
-                        title="Xóa"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </form>
+                    <DeleteCategoryButton id={category.id} />
                   </div>
                 </td>
               </tr>
