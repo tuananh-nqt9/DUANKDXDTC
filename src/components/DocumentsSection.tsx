@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Download, FileText, FlaskConical, Award, CheckCircle, ClipboardList, AlertTriangle, FolderOpen } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -43,9 +44,8 @@ export default async function DocumentsSection() {
             const IconComp = iconMap[doc.icon] || FileText;
             return (
               <ScrollReveal key={doc.id} variant="fade-up" delay={idx * 100}>
-                <a
-                  href={doc.pdfUrl}
-                  download
+                <Link
+                  href={`/tai-lieu/${doc.id}`}
                   className="group card-premium p-6 flex items-start gap-4 hover:border-primary-200 transition-all duration-300 cursor-pointer block"
                 >
                   <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:from-primary-600 group-hover:to-primary-700 transition-all duration-500 shadow-sm">
@@ -65,12 +65,12 @@ export default async function DocumentsSection() {
                         PDF • {doc.fileSize || "N/A"}
                       </span>
                       <div className="flex items-center gap-2 text-primary-600 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
-                        <Download className="w-4 h-4" />
-                        <span>Tải về</span>
+                        <FileText className="w-4 h-4" />
+                        <span>Xem & Tải về</span>
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               </ScrollReveal>
             );
           })}
