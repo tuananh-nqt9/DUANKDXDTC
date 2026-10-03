@@ -132,3 +132,17 @@ model Equipment {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+// Document - Hồ sơ tài liệu (PDF download trên trang chủ)
+model Document {
+  id          String   @id @default(cuid())
+  title       String   // Tên tài liệu: "Hồ sơ năng lực công ty"
+  description String?  // Mô tả ngắn
+  icon        String   @default("FileText") // Lucide icon name
+  pdfUrl      String   // Đường dẫn file PDF: /documents/xxx.pdf
+  fileSize    String?  // Kích thước file: "2.5 MB"
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

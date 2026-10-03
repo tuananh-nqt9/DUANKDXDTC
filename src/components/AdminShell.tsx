@@ -12,6 +12,7 @@ import {
   User,
   TestTube,
   Wrench,
+  FileText,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -31,6 +32,7 @@ const menuItems = [
   { href: "/admin/posts", label: "Tin tức", icon: Newspaper },
   { href: "/admin/test-categories", label: "Chỉ tiêu phép thử", icon: TestTube },
   { href: "/admin/equipment", label: "Trang thiết bị", icon: Wrench },
+  { href: "/admin/documents", label: "Hồ sơ tài liệu", icon: FileText },
   { href: "/admin/contacts", label: "Liên hệ", icon: Mail },
 ];
 
