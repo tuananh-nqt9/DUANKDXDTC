@@ -311,12 +311,20 @@ export default async function HomePage() {
                   <ScrollReveal key={service.id} variant="fade-up" delay={idx * 100}>
                     <div className="card-premium group relative overflow-hidden h-full flex flex-col">
                       {service.image ? (
-                        <div className="relative w-full h-56 overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <div className="relative w-full h-56 overflow-hidden bg-gray-900 flex items-center justify-center">
+                          {/* Blurred background image */}
+                          <Image
+                            src={service.image}
+                            alt="Background"
+                            fill
+                            className="object-cover opacity-40 blur-xl scale-110"
+                          />
+                          {/* Main contained image */}
                           <Image
                             src={service.image}
                             alt={service.title}
                             fill
-                            className="object-contain group-hover:scale-105 transition-transform duration-700 p-2"
+                            className="object-contain relative z-10 group-hover:scale-105 transition-transform duration-700 drop-shadow-xl"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                           <div className="absolute bottom-4 left-4">
@@ -400,14 +408,22 @@ export default async function HomePage() {
                     href={`/du-an/${project.slug}`}
                     className="card group block hover:shadow-2xl transition-all duration-500 overflow-hidden h-full"
                   >
-                    <div className="relative h-64 overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <div className="relative h-64 overflow-hidden bg-gray-900 flex items-center justify-center">
                       {project.image && (
                         <>
+                          {/* Blurred background image */}
+                          <Image
+                            src={project.image}
+                            alt="Background"
+                            fill
+                            className="object-cover opacity-40 blur-xl scale-110"
+                          />
+                          {/* Main contained image */}
                           <Image
                             src={project.image}
                             alt={project.title}
                             fill
-                            className="object-contain group-hover:scale-105 transition-transform duration-700 p-2"
+                            className="object-contain relative z-10 group-hover:scale-105 transition-transform duration-700 drop-shadow-xl"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/30 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
@@ -589,14 +605,24 @@ export default async function HomePage() {
                 {posts.map((post, idx) => (
                   <ScrollReveal key={post.id} variant="fade-up" delay={idx * 100}>
                     <article className="card-premium group h-full flex flex-col overflow-hidden">
-                      <div className="relative h-52 overflow-hidden bg-gray-100 flex items-center justify-center">
+                      <div className="relative h-52 overflow-hidden bg-gray-900 flex items-center justify-center">
                         {post.image && (
-                          <Image
-                            src={post.image}
-                            alt={post.title}
-                            fill
-                            className="object-contain group-hover:scale-105 transition-transform duration-700 p-2"
-                          />
+                          <>
+                            {/* Blurred background image */}
+                            <Image
+                              src={post.image}
+                              alt="Background"
+                              fill
+                              className="object-cover opacity-40 blur-xl scale-110"
+                            />
+                            {/* Main contained image */}
+                            <Image
+                              src={post.image}
+                              alt={post.title}
+                              fill
+                              className="object-contain relative z-10 group-hover:scale-105 transition-transform duration-700 drop-shadow-xl"
+                            />
+                          </>
                         )}
                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-primary-700 text-xs px-3 py-1.5 rounded-full font-semibold shadow-sm">
                           {post.category}
