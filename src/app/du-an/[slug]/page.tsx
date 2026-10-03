@@ -9,6 +9,48 @@ import { MapPin, Calendar, ArrowLeft, Building2 } from "lucide-react";
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
+import { COMPANY } from "@/lib/constants";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const project = await prisma.project.findUnique({ where: { slug: params.slug } });
+  
+  if (!project) {
+    return {
+      title: "Dự án không tồn tại",
+    };
+  }
+
+  const imageUrl = project.image || "/images/logo-thanhchuong.png";
+  const ogImageUrl = imageUrl.startsWith("http") ? imageUrl : `${COMPANY.contact.website}${imageUrl}`;
+
+  return {
+    title: `${project.title} | ${COMPANY.shortName}`,
+    description: project.excerpt || project.title,
+    openGraph: {
+      title: project.title,
+      description: project.excerpt || project.title,
+      url: `${COMPANY.contact.website}/du-an/${project.slug}`,
+      siteName: COMPANY.name,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.excerpt || project.title,
+      images: [ogImageUrl],
+    },
+  };
+}
+
 export default async function ProjectDetailPage({
   params,
 }: {

@@ -7,6 +7,50 @@ import { formatDate } from "@/lib/utils";
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { COMPANY } from "@/lib/constants";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await prisma.post.findUnique({ where: { slug: params.slug } });
+  
+  if (!post) {
+    return {
+      title: "Bài viết không tồn tại",
+    };
+  }
+
+  const imageUrl = post.image || "/images/logo-thanhchuong.png";
+  // Make sure URL is absolute for OG tags
+  const ogImageUrl = imageUrl.startsWith("http") ? imageUrl : `${COMPANY.contact.website}${imageUrl}`;
+
+  return {
+    title: `${post.title} | ${COMPANY.shortName}`,
+    description: post.excerpt || post.title,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.title,
+      url: `${COMPANY.contact.website}/tin-tuc/${post.slug}`,
+      siteName: COMPANY.name,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      type: "article",
+      publishedTime: post.publishedAt?.toISOString(),
+      authors: [post.author || COMPANY.name],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || post.title,
+      images: [ogImageUrl],
+    },
+  };
+}
 
 export default async function PostDetailPage({ params }: { params: { slug: string } }) {
   const post = await prisma.post.findUnique({ where: { slug: params.slug } });

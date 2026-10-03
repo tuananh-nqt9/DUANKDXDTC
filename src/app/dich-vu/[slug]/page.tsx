@@ -6,6 +6,49 @@ import Image from "next/image";
 
 // Force dynamic rendering
 export const dynamic = "force-dynamic";
+
+import type { Metadata } from "next";
+import { COMPANY } from "@/lib/constants";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const service = await prisma.service.findUnique({ where: { slug: params.slug } });
+  
+  if (!service) {
+    return {
+      title: "Dịch vụ không tồn tại",
+    };
+  }
+
+  const imageUrl = service.image || "/images/logo-thanhchuong.png";
+  const ogImageUrl = imageUrl.startsWith("http") ? imageUrl : `${COMPANY.contact.website}${imageUrl}`;
+
+  return {
+    title: `${service.title} | ${COMPANY.shortName}`,
+    description: service.excerpt || service.title,
+    openGraph: {
+      title: service.title,
+      description: service.excerpt || service.title,
+      url: `${COMPANY.contact.website}/dich-vu/${service.slug}`,
+      siteName: COMPANY.name,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: service.title,
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: service.title,
+      description: service.excerpt || service.title,
+      images: [ogImageUrl],
+    },
+  };
+}
+
 import {
   FlaskConical, ClipboardCheck, Mountain, HardHat, Activity, MountainSnow,
   CheckCircle,
