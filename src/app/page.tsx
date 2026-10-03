@@ -111,12 +111,12 @@ export default async function HomePage() {
                     <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-secondary-400 to-secondary-600 rounded-full opacity-60" />
                   </span>
                 </h1>
-                
+
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-primary-100/90 mb-6 tracking-wide">
                   KIỂM ĐỊNH XÂY DỰNG{" "}
                   <span className="text-secondary-300">CHUYÊN NGHIỆP</span>
                 </h2>
-                
+
                 <p className="text-base md:text-lg text-primary-100/80 mb-10 leading-relaxed max-w-xl">
                   Đơn vị tư vấn xây dựng hàng đầu với{" "}
                   <strong className="text-secondary-200 font-bold">
@@ -161,8 +161,8 @@ export default async function HomePage() {
                   { num: engineersNum, suffix: "+", label: "Kỹ sư chuyên gia", icon: Users, gradient: "from-primary-500/30 to-primary-600/30" },
                   { num: testParamsNum, suffix: "+", label: "Chỉ tiêu TN", icon: FlaskConical, gradient: "from-secondary-500/30 to-secondary-600/30" },
                 ].map((stat, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className={`backdrop-blur-lg bg-gradient-to-br ${stat.gradient} border border-white/15 rounded-2xl p-6 text-center hover:border-white/30 transition-all duration-500 hover:-translate-y-1 group`}
                   >
                     <stat.icon className="w-8 h-8 mx-auto mb-3 text-secondary-300 group-hover:scale-110 transition-transform duration-300" />
@@ -187,7 +187,7 @@ export default async function HomePage() {
         {/* ==================== STATS BAR (Mobile only - desktop is in hero) ==================== */}
         <section className="lg:hidden bg-gradient-to-r from-primary-800 via-primary-700 to-primary-800 py-10 relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-secondary-400 to-transparent" />
-          
+
           <div className="container-custom">
             <div className="grid grid-cols-2 gap-6 text-white">
               {[
@@ -217,13 +217,13 @@ export default async function HomePage() {
               <ScrollReveal variant="fade-right">
                 <div className="relative h-[450px] rounded-2xl overflow-hidden shadow-2xl group">
                   <Image
-                    src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800"
+                    src="/images/25-CMQGLqDK.jpg"
                     alt="Thanh Chương JSC"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary-900/70 via-primary-900/20 to-transparent" />
-                  
+
                   {/* Floating info card */}
                   <div className="absolute bottom-6 left-6 right-6 backdrop-blur-xl bg-white/95 p-6 rounded-xl shadow-xl border border-white/50">
                     <div className="flex items-center gap-4">
@@ -285,7 +285,7 @@ export default async function HomePage() {
           {/* Background decoration */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-100 rounded-full blur-[120px] opacity-30" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary-100 rounded-full blur-[100px] opacity-20" />
-          
+
           <div className="container-custom relative z-10">
             <ScrollReveal>
               <div className="text-center mb-16">
@@ -329,7 +329,7 @@ export default async function HomePage() {
                         <div className="p-8 pb-0 relative">
                           {/* Gradient corner decoration */}
                           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-bl-[100px] rounded-tr-[20px] opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                          
+
                           {/* Icon container */}
                           <div className="relative mb-6 inline-block">
                             <div className="absolute inset-0 bg-primary-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
@@ -339,16 +339,16 @@ export default async function HomePage() {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className={`p-8 ${service.image ? 'pt-6' : 'pt-0'} relative flex-1 flex flex-col`}>
                         <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary-600 transition-colors duration-300">
                           {service.title}
                         </h3>
-                        
+
                         <p className="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3 flex-1">
                           {service.excerpt}
                         </p>
-                        
+
                         <div className="mt-auto">
                           <Link
                             href={`/dich-vu/${service.slug}`}
@@ -362,7 +362,7 @@ export default async function HomePage() {
                           </Link>
                         </div>
                       </div>
-                      
+
                       {/* Bottom accent line */}
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
@@ -376,7 +376,7 @@ export default async function HomePage() {
         {/* ==================== DỰ ÁN NỔI BẬT ==================== */}
         <section className="py-20 md:py-28 bg-white relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-          
+
           <div className="container-custom relative z-10">
             <ScrollReveal>
               <div className="text-center mb-16">
@@ -410,19 +410,19 @@ export default async function HomePage() {
                             className="object-cover group-hover:scale-110 transition-transform duration-700"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 via-primary-900/30 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                          
+
                           {/* Shine sweep effect */}
                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
                         </>
                       )}
-                      
+
                       {project.featured && (
                         <span className="absolute top-4 left-4 backdrop-blur-md bg-secondary-500/90 text-white text-xs px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 shadow-lg border border-secondary-400/30">
                           <Sparkles className="w-3 h-3" />
                           Nổi bật
                         </span>
                       )}
-                      
+
                       {/* Hover arrow */}
                       <div className="absolute top-4 right-4 w-10 h-10 backdrop-blur-md bg-white/10 border border-white/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:rotate-45">
                         <ArrowRight className="w-5 h-5 text-white" />
@@ -433,7 +433,7 @@ export default async function HomePage() {
                       <h3 className="font-bold text-lg text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300">
                         {project.title}
                       </h3>
-                      
+
                       <div className="flex items-center justify-between text-sm text-gray-500 gap-4">
                         <span className="flex items-center gap-1.5">
                           <MapPin className="w-4 h-4 text-primary-500" />
@@ -444,7 +444,7 @@ export default async function HomePage() {
                           <span>{project.year}</span>
                         </span>
                       </div>
-                      
+
                       {/* Bottom accent line */}
                       <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-primary-600 to-secondary-500 group-hover:w-full transition-all duration-500 rounded-full" />
                     </div>
@@ -456,7 +456,7 @@ export default async function HomePage() {
             <ScrollReveal delay={300}>
               <div className="text-center mt-12">
                 <Link href="/du-an" className="btn-primary group">
-                  Xem tất cả dự án 
+                  Xem tất cả dự án
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
@@ -505,12 +505,12 @@ export default async function HomePage() {
                         <item.icon className="w-10 h-10 text-secondary-300 group-hover:text-secondary-200 group-hover:scale-110 transition-all duration-300" />
                       </div>
                     </div>
-                    
+
                     <h3 className="font-bold text-xl mb-3 group-hover:text-secondary-300 transition-colors duration-300">
                       {item.title}
                     </h3>
                     <p className="text-sm text-primary-200/70 leading-relaxed">{item.desc}</p>
-                    
+
                     {/* Decorative line */}
                     <div className="mt-5 mx-auto w-0 h-0.5 bg-gradient-to-r from-secondary-400 to-primary-400 group-hover:w-16 transition-all duration-500 rounded-full" />
                   </div>
@@ -525,10 +525,10 @@ export default async function HomePage() {
           {/* Animated orbs */}
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary-500 rounded-full blur-[200px] opacity-10 animate-float-slow" />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-500 rounded-full blur-[180px] opacity-10 animate-float" style={{ animationDelay: "1s" }} />
-          
+
           {/* Grid pattern */}
           <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
-          
+
           <div className="container-custom text-center relative z-10">
             <ScrollReveal>
               <div className="max-w-4xl mx-auto">
@@ -536,19 +536,19 @@ export default async function HomePage() {
                   <Phone className="w-4 h-4 text-secondary-300" />
                   Liên hệ tư vấn miễn phí
                 </div>
-                
+
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight hero-text-shadow">
                   CẦN TƯ VẤN VỀ DỰ ÁN?
                 </h2>
-                
+
                 <p className="text-primary-100/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
                   Liên hệ ngay với chúng tôi để được tư vấn miễn phí và nhận báo giá chi tiết trong vòng{" "}
                   <span className="font-bold text-secondary-300">24 giờ</span>
                 </p>
-                
+
                 <div className="flex flex-wrap justify-center gap-4">
-                  <a 
-                    href={`tel:${COMPANY.contact.hotline}`} 
+                  <a
+                    href={`tel:${COMPANY.contact.hotline}`}
                     className="group inline-flex items-center gap-2.5 px-8 py-4 bg-white text-primary-900 font-bold rounded-xl hover:bg-primary-50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95"
                   >
                     <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
@@ -725,10 +725,10 @@ export default async function HomePage() {
       {/* ==================== Floating Contact Buttons ==================== */}
       <div className="fixed right-4 md:right-6 bottom-4 md:bottom-6 z-50 flex flex-col gap-3">
         <BackToTop />
-        
+
         {/* Phone Button */}
-        <a 
-          href={`tel:${COMPANY.contact.hotline}`} 
+        <a
+          href={`tel:${COMPANY.contact.hotline}`}
           className="group relative w-14 h-14 md:w-16 md:h-16 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-neon-red hover:shadow-neon-red transition-all duration-300 hover:scale-110 active:scale-95"
           title="Gọi ngay"
         >
@@ -739,8 +739,8 @@ export default async function HomePage() {
           </span>
         </a>
 
-        <a 
-          href={`mailto:${COMPANY.contact.email}`} 
+        <a
+          href={`mailto:${COMPANY.contact.email}`}
           className="group relative w-14 h-14 md:w-16 md:h-16 bg-red-600 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
           title="Gửi email"
         >
@@ -751,10 +751,10 @@ export default async function HomePage() {
           </span>
         </a>
 
-        <a 
-          href={COMPANY.social.zalo} 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href={COMPANY.social.zalo}
+          target="_blank"
+          rel="noopener noreferrer"
           className="group relative w-14 h-14 md:w-16 md:h-16 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
           title="Chat Zalo"
         >
