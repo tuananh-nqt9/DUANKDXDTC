@@ -309,41 +309,62 @@ export default async function HomePage() {
                 const IconComp = iconMap[service.icon] || FlaskConical;
                 return (
                   <ScrollReveal key={service.id} variant="fade-up" delay={idx * 100}>
-                    <div className="card-premium p-8 group relative overflow-visible h-full">
-                      {/* Gradient corner decoration */}
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-bl-[100px] rounded-tr-[20px] opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                      
-                      <div className="relative">
-                        {/* Icon container */}
-                        <div className="relative mb-6 inline-block">
-                          <div className="absolute inset-0 bg-primary-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
-                          <div className="relative w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center group-hover:from-primary-600 group-hover:to-primary-700 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg">
-                            <IconComp className="w-8 h-8 text-primary-700 group-hover:text-white transition-colors duration-500" />
+                    <div className="card-premium group relative overflow-hidden h-full flex flex-col">
+                      {service.image ? (
+                        <div className="relative w-full h-48 overflow-hidden bg-gray-100">
+                          <Image
+                            src={service.image}
+                            alt={service.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                          <div className="absolute bottom-4 left-4">
+                            <div className="relative w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
+                              <IconComp className="w-6 h-6 text-white" />
+                            </div>
                           </div>
                         </div>
-
+                      ) : (
+                        <div className="p-8 pb-0 relative">
+                          {/* Gradient corner decoration */}
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-bl-[100px] rounded-tr-[20px] opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                          
+                          {/* Icon container */}
+                          <div className="relative mb-6 inline-block">
+                            <div className="absolute inset-0 bg-primary-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+                            <div className="relative w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center group-hover:from-primary-600 group-hover:to-primary-700 transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-lg">
+                              <IconComp className="w-8 h-8 text-primary-700 group-hover:text-white transition-colors duration-500" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className={`p-8 ${service.image ? 'pt-6' : 'pt-0'} relative flex-1 flex flex-col`}>
                         <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary-600 transition-colors duration-300">
                           {service.title}
                         </h3>
                         
-                        <p className="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3">
+                        <p className="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3 flex-1">
                           {service.excerpt}
                         </p>
                         
-                        <Link
-                          href={`/dich-vu/${service.slug}`}
-                          className="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm group/link hover:gap-3 transition-all duration-300"
-                        >
-                          <span className="relative">
-                            Tìm hiểu thêm
-                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 group-hover/link:w-full transition-all duration-300 rounded-full" />
-                          </span>
-                          <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" />
-                        </Link>
+                        <div className="mt-auto">
+                          <Link
+                            href={`/dich-vu/${service.slug}`}
+                            className="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm group/link hover:gap-3 transition-all duration-300"
+                          >
+                            <span className="relative">
+                              Tìm hiểu thêm
+                              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 group-hover/link:w-full transition-all duration-300 rounded-full" />
+                            </span>
+                            <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" />
+                          </Link>
+                        </div>
                       </div>
                       
                       {/* Bottom accent line */}
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-b-[20px]" />
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
                   </ScrollReveal>
                 );

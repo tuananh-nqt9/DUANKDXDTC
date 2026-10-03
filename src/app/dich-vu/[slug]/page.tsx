@@ -40,12 +40,13 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
         <section className="py-16">
           <div className="container-custom max-w-4xl">
             {service.image && (
-              <div className="relative h-80 rounded-2xl overflow-hidden mb-8">
+              <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-md bg-gray-50 flex justify-center">
                 <Image 
                   src={service.image} 
                   alt={service.title} 
-                  fill 
-                  className="object-cover"
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto max-h-[600px] object-contain"
                   priority
                 />
               </div>
