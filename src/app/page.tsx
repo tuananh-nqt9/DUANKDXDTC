@@ -311,12 +311,13 @@ export default async function HomePage() {
                   <ScrollReveal key={service.id} variant="fade-up" delay={idx * 100}>
                     <div className="card-premium group relative overflow-hidden h-full flex flex-col">
                       {service.image ? (
-                        <div className="relative w-full h-48 overflow-hidden bg-gray-100">
+                        <div className="relative w-full bg-gray-50 overflow-hidden border-b border-gray-100">
                           <Image
                             src={service.image}
                             alt={service.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            width={600}
+                            height={400}
+                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                           <div className="absolute bottom-4 left-4">
