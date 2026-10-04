@@ -77,9 +77,10 @@ export default async function HomePage() {
               src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920&q=80"
               alt="Construction site"
               fill
-              className="object-cover"
+              className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[20s]"
               priority
               quality={85}
+              style={{ objectPosition: "center 30%" }}
             />
             {/* Multi-layer gradient overlay for depth */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary-900/95 via-primary-900/80 to-primary-800/70" />
@@ -104,11 +105,11 @@ export default async function HomePage() {
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 </div>
 
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-6 leading-[1.1] tracking-tight hero-text-shadow">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-6 leading-[1.1] tracking-tight hero-text-shadow animate-fade-up">
                   THANH CHƯƠNG{" "}
                   <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-secondary-300 via-secondary-400 to-secondary-300 bg-clip-text text-transparent">JSC</span>
-                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-secondary-400 to-secondary-600 rounded-full opacity-60" />
+                    <span className="bg-gradient-to-r from-secondary-300 via-yellow-200 to-secondary-500 bg-clip-text text-transparent filter drop-shadow-lg">JSC</span>
+                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-secondary-400 to-secondary-600 rounded-full opacity-80 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
                   </span>
                 </h1>
 
@@ -117,9 +118,9 @@ export default async function HomePage() {
                   <span className="text-secondary-300">CHUYÊN NGHIỆP</span>
                 </h2>
 
-                <p className="text-base md:text-lg text-primary-100/80 mb-10 leading-relaxed max-w-xl">
+                <p className="text-base md:text-lg text-primary-100/90 mb-10 leading-relaxed max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
                   Đơn vị tư vấn xây dựng hàng đầu với{" "}
-                  <strong className="text-secondary-200 font-bold">
+                  <strong className="text-secondary-300 font-bold px-1 rounded bg-primary-800/50">
                     hơn {STATS.experience.replace('+', '')} năm kinh nghiệm
                   </strong>{" "}
                   trong lĩnh vực Thí nghiệm, Kiểm định, Giám sát và Tư vấn xây dựng trong và ngoài nước.
@@ -264,7 +265,7 @@ export default async function HomePage() {
                       "Dịch vụ chuyên nghiệp, báo cáo kết quả nhanh chóng",
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group">
-                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-green-500 transition-colors duration-300">
+                        <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-green-500 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] transition-all duration-300">
                           <CheckCircle className="w-4 h-4 text-green-600 group-hover:text-white transition-colors duration-300" />
                         </div>
                         <span className="text-gray-700 text-[15px]">{item}</span>

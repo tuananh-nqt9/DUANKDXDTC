@@ -1,7 +1,8 @@
 // POST /api/auth/login
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { comparePassword, createToken } from "@/lib/auth";
+import { createToken } from "@/lib/auth";
+import { comparePassword } from "@/lib/password";
 
 export async function POST(req: NextRequest) {
   try {
