@@ -52,7 +52,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        heading: ["Outfit", "Montserrat", "Inter", "sans-serif"],
+        heading: ["Montserrat", "Inter", "sans-serif"],
       },
       animation: {
         // Entrance animations
