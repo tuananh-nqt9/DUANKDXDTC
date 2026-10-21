@@ -14,7 +14,10 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverActions: { allowedOrigins: ["localhost:3000", "kdxdthanhchuong.vn"] },
+    serverActions: {
+      allowedOrigins: ["localhost:3000", "kdxdthanhchuong.vn"],
+      bodySizeLimit: "100mb",
+    },
     scrollRestoration: true,
   },
 };

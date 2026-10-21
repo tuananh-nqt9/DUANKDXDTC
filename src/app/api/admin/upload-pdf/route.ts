@@ -6,20 +6,21 @@ import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // Hỗ trợ upload file lớn đến 60s
 
-const MAX_PDF_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_PDF_SIZE = 100 * 1024 * 1024; // 100MB
 
 export async function POST(request: NextRequest) {
   try {
     // 1. Kiểm tra quyền Admin
     const token = cookies().get("auth-token")?.value || cookies().get("admin-token")?.value;
     if (!token) {
-      return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
+      return NextResponse.json({ error: "Chưa đăng nhập quản trị viên" }, { status: 401 });
     }
 
     const session = await verifyToken(token);
     if (!session) {
-      return NextResponse.json({ error: "Phiên đăng nhập hết hạn" }, { status: 401 });
+      return NextResponse.json({ error: "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại." }, { status: 401 });
     }
 
     // 2. Nhận FormData
@@ -38,36 +39,38 @@ export async function POST(request: NextRequest) {
 
     // 4. Kiểm tra dung lượng
     if (file.size > MAX_PDF_SIZE) {
-      return NextResponse.json({ error: "Dung lượng file vượt quá giới hạn cho phép (Tối đa 50MB)!" }, { status: 400 });
+      return NextResponse.json({ error: "Dung lượng file vượt quá giới hạn cho phép (Tối đa 100MB)!" }, { status: 400 });
     }
 
-    // 5. Đọc bytes và kiểm tra nội dung file thực tế (PDF signature check)
+    // 5. Đọc bytes và kiểm tra nội dung file thực tế (PDF signature check theo chuẩn ISO 32000-1)
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
     if (buffer.length < 5) {
-      return NextResponse.json({ error: "File rỗng hoặc không phải định dạng PDF!" }, { status: 400 });
+      return NextResponse.json({ error: "File rỗng hoặc không có nội dung!" }, { status: 400 });
     }
 
-    // PDF files bắt đầu bằng header %PDF
-    const pdfHeader = buffer.subarray(0, 4).toString("ascii");
-    if (pdfHeader !== "%PDF") {
+    // Theo chuẩn ISO 32000-1, chữ ký %PDF xuất hiện trong 1024 bytes đầu tiên
+    const headChunk = buffer.subarray(0, Math.min(buffer.length, 1024)).toString("latin1");
+    if (!headChunk.includes("%PDF")) {
       return NextResponse.json(
-        { error: "Nội dung file không hợp lệ! Header của file không phải là tài liệu PDF tiêu chuẩn (%PDF)." },
+        { error: "Nội dung file không hợp lệ! Không tìm thấy chữ ký tài liệu PDF tiêu chuẩn (%PDF) trong phần đầu của file." },
         { status: 400 }
       );
     }
 
-    // 6. Chuẩn hóa tên file
+    // 6. Chuẩn hóa tên file an toàn (hỗ trợ tiếng Việt có dấu, khoảng trắng, đ/Đ)
     const timestamp = Date.now();
     const rawName = path.parse(file.name).name;
     const safeName = rawName
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[đĐ]/g, "d")
       .replace(/[^a-z0-9]/g, "-")
       .replace(/-+/g, "-")
-      .slice(0, 50);
+      .replace(/^-|-$/g, "")
+      .slice(0, 60);
     const filename = `${timestamp}-${safeName || "document"}.pdf`;
 
     // 7. Đảm bảo thư mục public/documents tồn tại

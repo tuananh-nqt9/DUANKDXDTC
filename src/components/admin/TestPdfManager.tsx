@@ -19,6 +19,7 @@ import {
   X,
   ArrowRight,
 } from "lucide-react";
+import { parseApiResponse } from "@/lib/api-client";
 
 interface PdfSetting {
   title: string;
@@ -80,8 +81,9 @@ export default function TestPdfManager() {
       const res = await fetch("/api/admin/test-parameters-pdf", {
         cache: "no-store",
       });
-      if (!res.ok) throw new Error("Không thể tải thông tin PDF hiện tại");
-      const data: PdfSetting = await res.json();
+      const parsed = await parseApiResponse<PdfSetting>(res, "Không thể tải thông tin PDF hiện tại");
+      if (!parsed.ok || !parsed.data) throw new Error(parsed.error || "Không thể tải thông tin PDF hiện tại");
+      const data = parsed.data;
 
       setCurrentPdf(data);
       setFormData({
@@ -95,7 +97,7 @@ export default function TestPdfManager() {
       console.error(err);
       setMessage({
         type: "error",
-        text: "Không thể kết nối đến máy chủ để lấy thông tin PDF.",
+        text: err instanceof Error ? err.message : "Không thể kết nối đến máy chủ để lấy thông tin PDF.",
       });
     } finally {
       setLoading(false);
@@ -170,11 +172,13 @@ export default function TestPdfManager() {
         body: uploadFormData,
       });
 
-      const resData = await res.json();
+      const parsed = await parseApiResponse(res, "Tải lên file PDF thất bại");
 
-      if (!res.ok || !resData.url) {
-        throw new Error(resData.error || "Tải lên file PDF thất bại");
+      if (!parsed.ok || !parsed.data?.url) {
+        throw new Error(parsed.error || "Tải lên file PDF thất bại");
       }
+
+      const resData = parsed.data;
 
       // Cập nhật form với URL file thật trên server
       setFormData((prev) => ({
@@ -280,11 +284,13 @@ export default function TestPdfManager() {
         body: JSON.stringify(payload),
       });
 
-      const result = await res.json();
+      const parsed = await parseApiResponse(res, "Lưu tài liệu thất bại");
 
-      if (!res.ok) {
-        throw new Error(result.error || "Lưu tài liệu thất bại");
+      if (!parsed.ok || !parsed.data) {
+        throw new Error(parsed.error || "Lưu tài liệu thất bại");
       }
+
+      const result = parsed.data;
 
       // Dọn dẹp blob URL tạm nếu có
       if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {

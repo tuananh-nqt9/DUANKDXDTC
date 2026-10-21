@@ -20,6 +20,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+import { parseApiResponse } from "@/lib/api-client";
 
 interface Document {
   id: string;
@@ -71,8 +72,12 @@ export default function DocumentsAdminPage() {
   const fetchDocuments = async () => {
     try {
       const res = await fetch("/api/admin/documents");
-      const data = await res.json();
-      setDocuments(data);
+      const parsed = await parseApiResponse<Document[]>(res, "Không thể tải danh sách tài liệu");
+      if (!parsed.ok) {
+        setError(parsed.error || "Không thể tải danh sách tài liệu");
+        return;
+      }
+      setDocuments(parsed.data || []);
     } catch {
       setError("Không thể tải danh sách tài liệu");
     } finally {
@@ -91,9 +96,12 @@ export default function DocumentsAdminPage() {
         body: formDataUpload,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      const parsed = await parseApiResponse(res, "Upload file thất bại");
+      if (!parsed.ok || !parsed.data?.url) {
+        throw new Error(parsed.error || "Upload file thất bại");
+      }
 
-      const data = await res.json();
+      const data = parsed.data;
       const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
 
       if (isEdit && editData) {
@@ -111,9 +119,9 @@ export default function DocumentsAdminPage() {
       }
       setSuccess("Upload file thành công!");
       setTimeout(() => setSuccess(""), 3000);
-    } catch {
-      setError("Upload file thất bại");
-      setTimeout(() => setError(""), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload file thất bại");
+      setTimeout(() => setError(""), 5000);
     } finally {
       setUploading(false);
     }

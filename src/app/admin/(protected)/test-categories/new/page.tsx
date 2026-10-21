@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { parseApiResponse } from "@/lib/api-client";
 
 export default function NewTestCategoryPage() {
   const router = useRouter();
@@ -23,13 +24,13 @@ export default function NewTestCategoryPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.type !== "application/pdf") {
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       alert("Chỉ chấp nhận file PDF!");
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File không được vượt quá 10MB!");
+    if (file.size > 100 * 1024 * 1024) {
+      alert("File không được vượt quá 100MB!");
       return;
     }
 
@@ -43,10 +44,12 @@ export default function NewTestCategoryPage() {
         body: uploadFormData,
       });
 
-      if (!res.ok) throw new Error("Upload thất bại");
+      const parsed = await parseApiResponse(res, "Upload thất bại");
+      if (!parsed.ok || !parsed.data?.url) {
+        throw new Error(parsed.error || "Upload thất bại");
+      }
 
-      const data = await res.json();
-      setFormData({ ...formData, pdfUrl: data.url });
+      setFormData({ ...formData, pdfUrl: parsed.data.url });
     } catch (error) {
       alert(error instanceof Error ? error.message : "Upload thất bại");
     } finally {

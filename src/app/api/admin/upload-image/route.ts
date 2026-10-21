@@ -89,9 +89,11 @@ export async function POST(req: NextRequest) {
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[đĐ]/g, "d")
       .replace(/[^a-z0-9]/g, "-")
       .replace(/-+/g, "-")
-      .slice(0, 50);
+      .replace(/^-|-$/g, "")
+      .slice(0, 60);
 
     const detectedExt = isPng ? ".png" : isWebp ? ".webp" : isGif ? ".gif" : ".jpg";
     const finalExt = extension || detectedExt;

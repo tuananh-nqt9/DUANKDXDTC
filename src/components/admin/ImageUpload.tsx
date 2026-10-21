@@ -12,6 +12,7 @@ import {
   RefreshCw,
   Loader2,
 } from "lucide-react";
+import { parseApiResponse } from "@/lib/api-client";
 
 interface ImageUploadProps {
   name: string;
@@ -126,11 +127,13 @@ export default function ImageUpload({
         body: formData,
       });
 
-      const data = await res.json();
+      const parsed = await parseApiResponse(res, "Tải ảnh lên máy chủ thất bại");
 
-      if (!res.ok || !data.url) {
-        throw new Error(data.error || "Tải ảnh lên máy chủ thất bại");
+      if (!parsed.ok || !parsed.data?.url) {
+        throw new Error(parsed.error || "Tải ảnh lên máy chủ thất bại");
       }
+
+      const data = parsed.data;
 
       // Upload thành công: lưu URL thật của server
       updateUrl(data.url);
