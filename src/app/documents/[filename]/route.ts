@@ -36,6 +36,19 @@ export async function GET(
 
     const stat = statSync(filePath);
     const fileSize = stat.size;
+    const etag = `"${stat.mtimeMs.toString(36)}-${fileSize.toString(36)}"`;
+    const lastModified = stat.mtime.toUTCString();
+
+    const ifNoneMatch = request.headers.get("if-none-match");
+    if (ifNoneMatch && ifNoneMatch === etag) {
+      return new NextResponse(null, {
+        status: 304,
+        headers: {
+          "ETag": etag,
+          "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+        },
+      });
+    }
 
     // Kiểm tra Range header để hỗ trợ xem PDF phân đoạn (streaming/chuyển trang nhanh)
     const range = request.headers.get("range");
@@ -57,7 +70,9 @@ export async function GET(
           "Content-Length": chunksize.toString(),
           "Content-Type": "application/pdf",
           "Content-Disposition": `inline; filename="${encodeURIComponent(safeFilename)}"`,
-          "Cache-Control": "public, max-age=31536000, immutable",
+          "ETag": etag,
+          "Last-Modified": lastModified,
+          "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
         },
       });
     }
@@ -72,7 +87,9 @@ export async function GET(
         "Content-Length": fileSize.toString(),
         "Content-Disposition": `inline; filename="${encodeURIComponent(safeFilename)}"`,
         "Accept-Ranges": "bytes",
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "ETag": etag,
+        "Last-Modified": lastModified,
+        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       },
     });
   } catch (error) {

@@ -133,6 +133,7 @@ export async function saveTestParametersPdf(
     revalidatePath("/");
     revalidatePath("/chi-tieu-phep-thu");
     revalidatePath("/admin/test-categories");
+    revalidatePath("/", "layout");
   } catch (e) {
     console.warn("Revalidation warning:", e);
   }

@@ -165,7 +165,7 @@ export default async function TestCategoriesSection() {
               💡 Mẹo: Sử dụng thanh công cụ bên trong để phóng to, thu nhỏ, cuộn nhiều trang và chuyển nhanh giữa các trang.
             </p>
             <Link
-              href="/chi-tieu-phep-thu"
+              href="/chi-tieu-phep-thu#tai-lieu-chinh-thuc"
               className="text-primary-600 hover:underline font-medium flex items-center gap-1"
             >
               Xem chi tiết tại trang Danh mục chỉ tiêu &rarr;
