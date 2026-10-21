@@ -1,45 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
+import {
+  getTestParametersPdf,
+  saveTestParametersPdf,
+  SETTING_KEY,
+} from "@/lib/test-pdf-service";
+import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import path from "path";
 import { existsSync } from "fs";
 import { unlink } from "fs/promises";
 
-const SETTING_KEY = "test_parameters_pdf";
-
 export const dynamic = "force-dynamic";
 
-// GET - Lấy thông tin tài liệu PDF Chỉ tiêu phép thử
+// GET - Lấy thông tin tài liệu PDF Chỉ tiêu phép thử hiện tại
 export async function GET() {
   try {
-    const setting = await prisma.setting.findUnique({
-      where: { key: SETTING_KEY },
-    });
-
-    if (!setting || !setting.value) {
-      return NextResponse.json({
-        title: "Danh mục chỉ tiêu và phép thử",
-        pdfUrl: "",
-        fileName: "",
-        fileSize: "",
-        updatedAt: null,
-      });
-    }
-
-    try {
-      const data = JSON.parse(setting.value);
-      return NextResponse.json(data);
-    } catch {
-      return NextResponse.json({
-        title: "Danh mục chỉ tiêu và phép thử",
-        pdfUrl: setting.value,
-        fileName: "",
-        fileSize: "",
-        updatedAt: setting.updatedAt,
-      });
-    }
+    const data = await getTestParametersPdf();
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching test parameters PDF:", error);
     return NextResponse.json(
@@ -49,11 +28,11 @@ export async function GET() {
   }
 }
 
-// POST / PUT - Cập nhật thông tin tài liệu PDF
+// POST - Cập nhật thông tin tài liệu PDF
 export async function POST(request: NextRequest) {
   try {
-    // Xác thực admin qua cookie "auth-token"
-    const token = cookies().get("auth-token")?.value;
+    // 1. Kiểm tra xác thực Admin
+    const token = cookies().get("auth-token")?.value || cookies().get("admin-token")?.value;
     if (!token) {
       return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
     }
@@ -63,43 +42,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Phiên đăng nhập hết hạn" }, { status: 401 });
     }
 
+    // 2. Nhận dữ liệu cập nhật
     const body = await request.json();
-    const { title, pdfUrl, fileName, fileSize } = body;
+    const { title, pdfUrl, fileName, fileSize, isPublished } = body;
 
-    if (!pdfUrl) {
+    if (!pdfUrl || !pdfUrl.trim()) {
       return NextResponse.json(
         { error: "Đường dẫn file PDF không được để trống" },
         { status: 400 }
       );
     }
 
-    const payload = {
-      title: title || "Danh mục chỉ tiêu và phép thử",
+    const savedData = await saveTestParametersPdf({
+      title,
       pdfUrl,
-      fileName: fileName || path.basename(pdfUrl),
-      fileSize: fileSize || "",
-      updatedAt: new Date().toISOString(),
-    };
-
-    const setting = await prisma.setting.upsert({
-      where: { key: SETTING_KEY },
-      update: {
-        value: JSON.stringify(payload),
-      },
-      create: {
-        key: SETTING_KEY,
-        value: JSON.stringify(payload),
-      },
+      fileName,
+      fileSize,
+      isPublished: isPublished !== false,
     });
-
-    // Revalidate trang chủ và trang chỉ tiêu phép thử để cập nhật ngay lập tức
-    revalidatePath("/");
-    revalidatePath("/chi-tieu-phep-thu");
-    revalidatePath("/admin/test-categories");
 
     return NextResponse.json({
       success: true,
-      data: payload,
+      data: savedData,
     });
   } catch (error) {
     console.error("Error saving test parameters PDF:", error);
@@ -110,10 +74,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE - Xóa tài liệu PDF
+// DELETE - Xóa tài liệu PDF (hoặc đưa về mặc định)
 export async function DELETE() {
   try {
-    const token = cookies().get("auth-token")?.value;
+    const token = cookies().get("auth-token")?.value || cookies().get("admin-token")?.value;
     if (!token) {
       return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
     }
@@ -130,7 +94,11 @@ export async function DELETE() {
     if (setting?.value) {
       try {
         const parsed = JSON.parse(setting.value);
-        if (parsed.pdfUrl && parsed.pdfUrl.startsWith("/documents/")) {
+        if (
+          parsed.pdfUrl &&
+          parsed.pdfUrl.startsWith("/documents/") &&
+          !parsed.pdfUrl.includes("thanh-chuong-cbhs.pdf") // Không xóa file gốc hệ thống
+        ) {
           const filePath = path.join(process.cwd(), "public", parsed.pdfUrl);
           if (existsSync(filePath)) {
             await unlink(filePath).catch(() => {});

@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import {
   FileText,
   Upload,
-  Trash2,
   Save,
   CheckCircle2,
   AlertCircle,
@@ -14,7 +13,11 @@ import {
   RefreshCw,
   HardDrive,
   Calendar,
-  Sparkles,
+  Globe,
+  FileCheck,
+  FileUp,
+  X,
+  ArrowRight,
 } from "lucide-react";
 
 interface PdfSetting {
@@ -23,56 +26,78 @@ interface PdfSetting {
   fileName: string;
   fileSize: string;
   updatedAt: string | null;
+  isPublished: boolean;
 }
 
 export default function TestPdfManager() {
-  const [data, setData] = useState<PdfSetting>({
-    title: "Danh mục chỉ tiêu và phép thử phòng thí nghiệm LAS-XD 795",
+  // Dữ liệu tài liệu PDF hiện tại đang hoạt động trên website
+  const [currentPdf, setCurrentPdf] = useState<PdfSetting | null>(null);
+
+  // Form dữ liệu chỉnh sửa / thay thế
+  const [formData, setFormData] = useState({
+    title: "",
     pdfUrl: "",
     fileName: "",
     fileSize: "",
-    updatedAt: null,
   });
 
+  // Trạng thái file mới đang chọn / upload
+  const [newFileUploaded, setNewFileUploaded] = useState(false);
+
+  // Loading & UI state
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [showPreview, setShowPreview] = useState(true);
-  const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({
-    type: "",
-    text: "",
-  });
+  const [showCurrentPreview, setShowCurrentPreview] = useState(true);
+  const [showReplaceForm, setShowReplaceForm] = useState(false);
+  const [message, setMessage] = useState<{
+    type: "success" | "error" | "";
+    text: string;
+  }>({ type: "", text: "" });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const replaceSectionRef = useRef<HTMLDivElement>(null);
 
-  // Tải dữ liệu PDF hiện tại
+  // Tải dữ liệu PDF hiện tại từ API
   useEffect(() => {
-    fetchPdfData();
+    fetchCurrentPdf();
   }, []);
 
-  const fetchPdfData = async () => {
+  const fetchCurrentPdf = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/admin/test-parameters-pdf", { cache: "no-store" });
-      if (!res.ok) throw new Error("Không thể tải thông tin PDF");
-      const result = await res.json();
-      setData({
-        title: result.title || "Danh mục chỉ tiêu và phép thử phòng thí nghiệm LAS-XD 795",
-        pdfUrl: result.pdfUrl || "",
-        fileName: result.fileName || "",
-        fileSize: result.fileSize || "",
-        updatedAt: result.updatedAt || null,
+      const res = await fetch("/api/admin/test-parameters-pdf", {
+        cache: "no-store",
       });
+      if (!res.ok) throw new Error("Không thể tải thông tin PDF hiện tại");
+      const data: PdfSetting = await res.json();
+
+      setCurrentPdf(data);
+      setFormData({
+        title: data.title || "Công bố thông tin về năng lực đủ điều kiện hoạt động thí nghiệm chuyên ngành xây dựng (LAS-XD 795)",
+        pdfUrl: data.pdfUrl || "",
+        fileName: data.fileName || "",
+        fileSize: data.fileSize || "",
+      });
+      setNewFileUploaded(false);
     } catch (err) {
       console.error(err);
       setMessage({
         type: "error",
-        text: "Không thể tải dữ liệu PDF hiện tại.",
+        text: "Không thể kết nối đến máy chủ để lấy thông tin PDF.",
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  // Kích hoạt thay thế PDF
+  const handleTriggerReplace = () => {
+    setShowReplaceForm(true);
+    setTimeout(() => {
+      fileInputRef.current?.click();
+      replaceSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   // Upload file PDF từ máy tính
@@ -80,9 +105,13 @@ export default function TestPdfManager() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input để có thể chọn lại file cùng tên
     e.target.value = "";
 
-    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+    if (
+      file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")
+    ) {
       setMessage({
         type: "error",
         text: "Chỉ chấp nhận file định dạng PDF (.pdf)!",
@@ -102,12 +131,12 @@ export default function TestPdfManager() {
     setMessage({ type: "", text: "" });
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
 
       const res = await fetch("/api/admin/upload-pdf", {
         method: "POST",
-        body: formData,
+        body: uploadFormData,
       });
 
       const resData = await res.json();
@@ -116,36 +145,65 @@ export default function TestPdfManager() {
         throw new Error(resData.error || "Tải lên file PDF thất bại");
       }
 
-      // Cập nhật state với file vừa upload
-      setData((prev) => ({
+      // Cập nhật form với file mới
+      setFormData((prev) => ({
         ...prev,
         pdfUrl: resData.url,
         fileName: resData.originalName || resData.filename,
         fileSize: resData.fileSize || "",
       }));
+      setNewFileUploaded(true);
+      setShowReplaceForm(true);
 
       setMessage({
         type: "success",
-        text: "✓ Đã tải file PDF lên thành công! Nhấn 'Lưu & Công khai' bên dưới để áp dụng lên website.",
+        text: `✓ Đã tải lên file mới: "${resData.originalName || resData.filename}" (${resData.fileSize}). Nhấn "Lưu & Công khai lên Website" để hoàn tất cập nhật.`,
       });
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Upload PDF thất bại. Vui lòng thử lại.",
+        text:
+          err instanceof Error
+            ? err.message
+            : "Upload PDF thất bại. File cũ vẫn được bảo toàn nguyên vẹn.",
       });
     } finally {
       setUploading(false);
     }
   };
 
-  // Lưu và công khai lên website
+  // Hủy thay thế, quay về file cũ
+  const handleCancelReplace = () => {
+    if (currentPdf) {
+      setFormData({
+        title: currentPdf.title,
+        pdfUrl: currentPdf.pdfUrl,
+        fileName: currentPdf.fileName,
+        fileSize: currentPdf.fileSize,
+      });
+    }
+    setNewFileUploaded(false);
+    setShowReplaceForm(false);
+    setMessage({ type: "", text: "" });
+  };
+
+  // Lưu & công khai lên website
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    if (!data.pdfUrl || !data.pdfUrl.trim()) {
+    const targetUrl = formData.pdfUrl?.trim() || currentPdf?.pdfUrl?.trim();
+    if (!targetUrl) {
       setMessage({
         type: "error",
-        text: "Vui lòng chọn hoặc tải lên file PDF trước khi lưu!",
+        text: "Vui lòng chọn file PDF hoặc nhập đường dẫn trước khi lưu!",
+      });
+      return;
+    }
+
+    if (!formData.title?.trim()) {
+      setMessage({
+        type: "error",
+        text: "Tiêu đề văn bản công bố không được để trống!",
       });
       return;
     }
@@ -154,10 +212,18 @@ export default function TestPdfManager() {
     setMessage({ type: "", text: "" });
 
     try {
+      const payload = {
+        title: formData.title.trim(),
+        pdfUrl: targetUrl,
+        fileName: formData.fileName || (currentPdf ? currentPdf.fileName : "danh-muc-chi-tieu.pdf"),
+        fileSize: formData.fileSize || (currentPdf ? currentPdf.fileSize : ""),
+        isPublished: true,
+      };
+
       const res = await fetch("/api/admin/test-parameters-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       const result = await res.json();
@@ -166,14 +232,14 @@ export default function TestPdfManager() {
         throw new Error(result.error || "Lưu tài liệu thất bại");
       }
 
-      setData((prev) => ({
-        ...prev,
-        updatedAt: result.data?.updatedAt || new Date().toISOString(),
-      }));
+      // Cập nhật lại state hiện tại
+      setCurrentPdf(result.data);
+      setNewFileUploaded(false);
+      setShowReplaceForm(false);
 
       setMessage({
         type: "success",
-        text: "✓ Lưu và công khai thành công! Website kdxdthanhchuong.vn đã được cập nhật file PDF mới.",
+        text: "✓ Đã lưu và công khai thành công! Website kdxdthanhchuong.vn đã cập nhật tài liệu PDF mới nhất.",
       });
     } catch (err) {
       setMessage({
@@ -185,271 +251,363 @@ export default function TestPdfManager() {
     }
   };
 
-  // Xóa tài liệu PDF
-  const handleDelete = async () => {
-    if (!confirm("Bạn có chắc chắn muốn xóa tài liệu PDF này khỏi website?")) {
-      return;
-    }
-
-    setDeleting(true);
-    try {
-      const res = await fetch("/api/admin/test-parameters-pdf", {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("Xóa tài liệu thất bại");
-
-      setData({
-        title: "Danh mục chỉ tiêu và phép thử",
-        pdfUrl: "",
-        fileName: "",
-        fileSize: "",
-        updatedAt: null,
-      });
-
-      setMessage({
-        type: "success",
-        text: "✓ Đã xóa tài liệu PDF thành công khỏi website.",
-      });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Lỗi khi xóa tài liệu.",
-      });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const formattedDate = data.updatedAt
-    ? new Date(data.updatedAt).toLocaleDateString("vi-VN", {
+  // Định dạng ngày hiển thị
+  const formattedDate = currentPdf?.updatedAt
+    ? new Date(currentPdf.updatedAt).toLocaleDateString("vi-VN", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
       })
-    : null;
+    : "Đã thiết lập mặc định";
+
+  // Kiểm tra nút Lưu có nên enable không:
+  // Nút luôn enable khi đã có ít nhất 1 file pdf (hoặc từ hiện tại hoặc vừa upload/nhập) và không đang upload/saving
+  const canSave =
+    !saving &&
+    !uploading &&
+    Boolean((formData.pdfUrl && formData.pdfUrl.trim()) || (currentPdf && currentPdf.pdfUrl));
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 mb-8 text-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-red-600 border-t-transparent mx-auto mb-3"></div>
+        <p className="text-sm font-semibold text-gray-700">Đang đồng bộ dữ liệu PDF với website...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
-      {/* Tiêu đề Box */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-            <FileText className="w-7 h-7" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-gray-900">
-                Tài liệu PDF: Danh mục chỉ tiêu &amp; phép thử
-              </h2>
-              <span className="px-2.5 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded-full">
-                Hiển thị trang chủ
-              </span>
+    <div className="space-y-6 mb-8">
+      {/* ============================================================== */}
+      {/* KHỐI 1: TÀI LIỆU PDF HIỆN TẠI (ĐANG CÔNG KHAI TRÊN WEBSITE)     */}
+      {/* ============================================================== */}
+      <div className="bg-white rounded-2xl border-2 border-green-500/30 shadow-md p-6 relative overflow-hidden">
+        {/* Dải màu trang trí phía trên */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-500 via-primary-500 to-red-500" />
+
+        {/* Header khối hiện tại */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-gray-200">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0 shadow-sm border border-red-100">
+              <FileText className="w-8 h-8" />
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">
-              File PDF này sẽ được nhúng trực tiếp vào mục &quot;DANH MỤC CHỈ TIÊU &amp; PHÉP THỬ&quot; tại trang chủ và trang năng lực.
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-extrabold rounded-full flex items-center gap-1.5 uppercase tracking-wide">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  Đang hiển thị công khai trên Website
+                </span>
+                <span className="text-xs text-gray-400">|</span>
+                <span className="text-xs text-gray-500 font-medium flex items-center gap-1">
+                  <Globe className="w-3.5 h-3.5 text-primary-600" />
+                  kdxdthanhchuong.vn
+                </span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-1.5">
+                {currentPdf?.title || "Tài liệu danh mục chỉ tiêu & phép thử"}
+              </h2>
+            </div>
+          </div>
+
+          {/* Nhóm nút Xem tài liệu & Thay thế PDF */}
+          <div className="flex flex-wrap items-center gap-3 self-start lg:self-center">
+            {currentPdf?.pdfUrl && (
+              <a
+                href={currentPdf.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-bold rounded-xl transition-colors shadow-sm"
+              >
+                <ExternalLink className="w-4 h-4 text-gray-600" />
+                Xem tài liệu
+              </a>
+            )}
+
+            <button
+              type="button"
+              onClick={handleTriggerReplace}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Thay thế PDF
+            </button>
+          </div>
+        </div>
+
+        {/* Bảng thông số chi tiết của file PDF hiện tại */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-6 border-b border-gray-100 bg-gray-50/60 rounded-xl px-4 mt-6">
+          <div className="space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Tên file:</span>
+            <p className="text-sm font-bold text-gray-900 truncate" title={currentPdf?.fileName}>
+              {currentPdf?.fileName || "thanh-chuong-cbhs.pdf"}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 flex items-center gap-1">
+              <HardDrive className="w-3.5 h-3.5" /> Dung lượng file:
+            </span>
+            <p className="text-sm font-bold text-gray-900">
+              {currentPdf?.fileSize || "3.69 MB"}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" /> Ngày cập nhật:
+            </span>
+            <p className="text-sm font-bold text-gray-900">{formattedDate}</p>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Đường dẫn server:</span>
+            <p className="text-xs font-mono font-medium text-gray-700 truncate" title={currentPdf?.pdfUrl}>
+              {currentPdf?.pdfUrl || "/documents/thanh-chuong-cbhs.pdf"}
             </p>
           </div>
         </div>
 
-        {data.pdfUrl && (
-          <button
-            type="button"
-            onClick={() => setShowPreview(!showPreview)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-semibold transition-colors self-start md:self-auto"
-          >
-            {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            {showPreview ? "Ẩn khung xem trước" : "Hiện khung xem trước"}
-          </button>
-        )}
-      </div>
-
-      {/* Thông báo trạng thái */}
-      {message.text && (
-        <div
-          className={`my-4 p-4 rounded-xl text-sm flex items-start gap-3 ${
-            message.type === "success"
-              ? "bg-green-50 border border-green-200 text-green-800"
-              : "bg-red-50 border border-red-200 text-red-800"
-          }`}
-        >
-          {message.type === "success" ? (
-            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-          ) : (
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-          )}
-          <span className="font-medium">{message.text}</span>
-        </div>
-      )}
-
-      {/* Form chỉnh sửa & Upload */}
-      <div className="py-6 space-y-6">
-        <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-1">
-            Tiêu đề văn bản công bố <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={data.title}
-            onChange={(e) => setData({ ...data, title: e.target.value })}
-            placeholder="VD: Công bố thông tin về năng lực đủ điều kiện hoạt động thí nghiệm chuyên ngành xây dựng (LAS-XD 795)"
-            className="form-input"
-          />
-        </div>
-
-        {/* Khung thông tin file hiện tại */}
-        {data.pdfUrl ? (
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0 font-bold text-xs">
-                PDF
-              </div>
-              <div className="min-w-0">
-                <div className="font-semibold text-gray-900 text-sm truncate">
-                  {data.fileName || "Tài liệu chỉ tiêu phép thử"}
-                </div>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mt-0.5">
-                  <span className="font-mono text-gray-600">{data.pdfUrl}</span>
-                  {data.fileSize && (
-                    <span className="flex items-center gap-1 font-medium">
-                      <HardDrive className="w-3.5 h-3.5" />
-                      {data.fileSize}
-                    </span>
-                  )}
-                  {formattedDate && (
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {formattedDate}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <a
-                href={data.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-gray-600 hover:text-primary-600 hover:bg-white rounded-lg border border-transparent hover:border-gray-200 transition-colors"
-                title="Mở tài liệu trong tab mới"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
-
+        {/* Khung xem trước trực tiếp tài liệu hiện tại */}
+        {currentPdf?.pdfUrl && (
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                <FileCheck className="w-4 h-4 text-green-600" />
+                Khung xem trước tài liệu PDF đang hiển thị ngoài website:
+              </h3>
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 transition-colors"
+                onClick={() => setShowCurrentPreview(!showCurrentPreview)}
+                className="text-xs text-primary-600 hover:text-primary-800 font-semibold inline-flex items-center gap-1"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Thay thế file khác
-              </button>
-
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={deleting}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-lg border border-red-200 transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                Xóa file
+                {showCurrentPreview ? (
+                  <>
+                    <EyeOff className="w-3.5 h-3.5" /> Thu gọn
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-3.5 h-3.5" /> Mở rộng xem trước
+                  </>
+                )}
               </button>
             </div>
-          </div>
-        ) : (
-          /* Khung Upload khi chưa có file */
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-gray-300 hover:border-red-500 bg-gray-50 hover:bg-red-50/20 rounded-2xl p-8 text-center cursor-pointer transition-all group"
-          >
-            {uploading ? (
-              <div className="flex flex-col items-center justify-center">
-                <div className="animate-spin rounded-full h-10 w-10 border-2 border-red-600 border-t-transparent mb-3"></div>
-                <p className="text-sm font-bold text-gray-800">Đang tải file PDF lên máy chủ...</p>
-                <p className="text-xs text-gray-500 mt-1">Vui lòng chờ trong giây lát</p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center">
-                <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                  <Upload className="w-7 h-7" />
-                </div>
-                <p className="text-base font-bold text-gray-800 mb-1">
-                  Nhấp để chọn file PDF từ máy tính
-                </p>
-                <p className="text-xs text-gray-500">
-                  Chỉ chấp nhận file định dạng .pdf (Dung lượng tối đa 50MB)
-                </p>
+
+            {showCurrentPreview && (
+              <div className="w-full h-[550px] bg-slate-900 rounded-xl overflow-hidden border border-gray-300 shadow-inner">
+                <iframe
+                  src={`${currentPdf.pdfUrl}#toolbar=1&navpanes=1`}
+                  className="w-full h-full border-0"
+                  title="Xem trước PDF hiện tại"
+                />
               </div>
             )}
           </div>
         )}
-
-        {/* Input file ẩn */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          onChange={handleFileUpload}
-          className="hidden"
-        />
-
-        {/* Hoặc nhập URL trực tiếp nếu cần */}
-        <div className="pt-2">
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Hoặc nhập đường dẫn file PDF thủ công (nếu file đã có sẵn trên máy chủ):
-          </label>
-          <input
-            type="text"
-            value={data.pdfUrl}
-            onChange={(e) => setData({ ...data, pdfUrl: e.target.value })}
-            placeholder="/documents/thanh-chuong-cbhs.pdf"
-            className="form-input font-mono text-xs"
-          />
-        </div>
       </div>
 
-      {/* Nút hành động Lưu */}
-      <div className="flex items-center justify-between pt-5 border-t border-gray-200">
-        <div className="text-xs text-gray-500">
-          ⚠️ Sau khi nhấn &quot;Lưu &amp; Công khai&quot;, trang chủ sẽ tự động cập nhật ngay file PDF mới.
-        </div>
-
-        <button
-          type="button"
-          onClick={() => handleSave()}
-          disabled={saving || uploading || !data.pdfUrl}
-          className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-all hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
-        >
-          <Save className="w-4 h-4" />
-          {saving ? "Đang lưu..." : "Lưu & Công khai lên Website"}
-        </button>
-      </div>
-
-      {/* Khung Xem trước PDF trực tiếp */}
-      {showPreview && data.pdfUrl && (
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-              <Eye className="w-4 h-4 text-primary-600" />
-              Bản xem trước tài liệu PDF trên website:
-            </h3>
-            <span className="text-xs text-gray-500">
-              Trình xem PDF này tương tự giao diện người dùng nhìn thấy
-            </span>
+      {/* ============================================================== */}
+      {/* KHỐI 2: THAY THẾ & CẬP NHẬT TÀI LIỆU PDF MỚI                   */}
+      {/* ============================================================== */}
+      <div
+        ref={replaceSectionRef}
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6"
+      >
+        <div className="flex items-center justify-between pb-5 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center font-bold">
+              <FileUp className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">
+                Thay thế &amp; Cập nhật tài liệu PDF
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Chọn file PDF mới từ máy tính hoặc chỉnh sửa tiêu đề văn bản, sau đó nhấn Lưu để công khai.
+              </p>
+            </div>
           </div>
-          <div className="w-full h-[650px] bg-slate-800 rounded-xl overflow-hidden border border-gray-300 shadow-inner">
-            <iframe
-              src={`${data.pdfUrl}#toolbar=1&navpanes=1`}
-              className="w-full h-full border-0"
-              title="Bản xem trước tài liệu PDF"
+
+          {newFileUploaded && (
+            <button
+              type="button"
+              onClick={handleCancelReplace}
+              className="text-xs text-gray-500 hover:text-red-600 font-semibold inline-flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-100"
+            >
+              <X className="w-4 h-4" /> Hủy thay thế
+            </button>
+          )}
+        </div>
+
+        {/* Thông báo Alert */}
+        {message.text && (
+          <div
+            className={`my-5 p-4 rounded-xl text-sm flex items-start gap-3 ${
+              message.type === "success"
+                ? "bg-green-50 border border-green-200 text-green-900"
+                : "bg-red-50 border border-red-200 text-red-900"
+            }`}
+          >
+            {message.type === "success" ? (
+              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            )}
+            <span className="font-medium leading-relaxed">{message.text}</span>
+          </div>
+        )}
+
+        {/* Form nhập liệu */}
+        <form onSubmit={handleSave} className="py-5 space-y-6">
+          <div>
+            <label className="block text-sm font-bold text-gray-800 mb-1.5">
+              Tiêu đề văn bản công bố <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              placeholder="VD: Công bố thông tin về năng lực đủ điều kiện hoạt động thí nghiệm chuyên ngành xây dựng (LAS-XD 795)"
+              className="form-input font-medium"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Tiêu đề này sẽ hiển thị làm tiêu đề của tài liệu trên trang chủ.
+            </p>
+          </div>
+
+          {/* Khu vực chọn file PDF mới */}
+          <div>
+            <label className="block text-sm font-bold text-gray-800 mb-2">
+              Tải lên file PDF thay thế từ máy tính
+            </label>
+
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className={`border-2 border-dashed rounded-2xl p-7 text-center cursor-pointer transition-all ${
+                newFileUploaded
+                  ? "border-green-500 bg-green-50/30"
+                  : "border-gray-300 hover:border-primary-500 bg-gray-50 hover:bg-primary-50/20"
+              }`}
+            >
+              {uploading ? (
+                <div className="flex flex-col items-center justify-center py-2">
+                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary-600 border-t-transparent mb-3"></div>
+                  <p className="text-sm font-bold text-gray-800">Đang tải file PDF mới lên máy chủ...</p>
+                  <p className="text-xs text-gray-500 mt-1">Vui lòng đợi giây lát</p>
+                </div>
+              ) : newFileUploaded ? (
+                <div className="flex flex-col items-center justify-center py-2 text-green-800">
+                  <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-2">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <p className="text-sm font-bold">
+                    Đã chọn file mới: {formData.fileName} ({formData.fileSize})
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Nhấp vào đây nếu bạn muốn chọn file khác
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-2">
+                  <div className="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mb-3">
+                    <Upload className="w-6 h-6" />
+                  </div>
+                  <p className="text-sm font-bold text-gray-800 mb-1">
+                    Nhấp để chọn file PDF mới từ thiết bị
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Định dạng .pdf (Dung lượng tối đa 50MB). File cũ sẽ vẫn được giữ nguyên cho đến khi bạn nhấn Lưu.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,application/pdf"
+              onChange={handleFileUpload}
+              className="hidden"
             />
           </div>
-        </div>
-      )}
+
+          {/* Ô nhập đường dẫn thủ công */}
+          <div>
+            <label className="block text-xs font-semibold text-gray-700 mb-1">
+              Đường dẫn file PDF đang chọn:
+            </label>
+            <input
+              type="text"
+              value={formData.pdfUrl}
+              onChange={(e) => {
+                setFormData({ ...formData, pdfUrl: e.target.value });
+                setNewFileUploaded(true);
+              }}
+              placeholder="/documents/thanh-chuong-cbhs.pdf"
+              className="form-input font-mono text-xs"
+            />
+          </div>
+
+          {/* Khung xem trước của file mới vừa chọn trước khi lưu */}
+          {newFileUploaded && formData.pdfUrl && (
+            <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                  <Eye className="w-4 h-4 text-amber-600" />
+                  Xem trước file PDF MỚI vừa chọn (Kiểm tra kỹ trước khi nhấn Lưu):
+                </span>
+                <span className="text-xs text-amber-700 font-medium">Chưa lưu vào website</span>
+              </div>
+              <div className="w-full h-[450px] bg-slate-900 rounded-lg overflow-hidden border border-amber-200 shadow-sm">
+                <iframe
+                  src={`${formData.pdfUrl}#toolbar=1&navpanes=1`}
+                  className="w-full h-full border-0"
+                  title="Xem trước file mới"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Nút hành động Lưu & Công khai */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-gray-200">
+            <p className="text-xs text-gray-500">
+              💡 Sau khi nhấn &quot;Lưu &amp; Công khai&quot;, trang User tại <span className="font-semibold text-gray-700">kdxdthanhchuong.vn</span> sẽ tự động chuyển sang file này ngay lập tức.
+            </p>
+
+            <div className="flex items-center gap-3">
+              {newFileUploaded && (
+                <button
+                  type="button"
+                  onClick={handleCancelReplace}
+                  className="px-4 py-2.5 border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold rounded-xl text-sm transition-colors"
+                >
+                  Hủy
+                </button>
+              )}
+
+              <button
+                type="submit"
+                disabled={!canSave}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-all hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    Đang lưu &amp; Công khai...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Lưu &amp; Công khai lên Website
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
