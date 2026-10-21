@@ -56,7 +56,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Chuẩn hóa tên file an toàn
+    // 5. Đọc bytes và kiểm tra nội dung file thực tế (Magic bytes)
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    if (buffer.length === 0) {
+      return NextResponse.json({ error: "File rỗng không có nội dung!" }, { status: 400 });
+    }
+
+    // Kiểm tra magic bytes nhận diện ảnh
+    const isJpeg = buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+    const isPng = buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47;
+    const isGif = buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46;
+    const isWebp =
+      buffer[0] === 0x52 &&
+      buffer[1] === 0x49 &&
+      buffer[2] === 0x46 &&
+      buffer[3] === 0x46 &&
+      buffer.subarray(8, 12).toString("ascii") === "WEBP";
+
+    if (!isJpeg && !isPng && !isGif && !isWebp) {
+      return NextResponse.json(
+        { error: "Nội dung file không phải là định dạng hình ảnh hợp lệ (JPG, PNG, GIF, WebP)!" },
+        { status: 400 }
+      );
+    }
+
+    // 6. Chuẩn hóa tên file an toàn
     const timestamp = Date.now();
     const rawName = path.parse(file.name).name;
     const safeName = rawName
@@ -66,20 +92,24 @@ export async function POST(req: NextRequest) {
       .replace(/[^a-z0-9]/g, "-")
       .replace(/-+/g, "-")
       .slice(0, 50);
-    const finalExt = extension || (mimeType === "image/png" ? ".png" : mimeType === "image/webp" ? ".webp" : ".jpg");
+
+    const detectedExt = isPng ? ".png" : isWebp ? ".webp" : isGif ? ".gif" : ".jpg";
+    const finalExt = extension || detectedExt;
     const filename = `${timestamp}-${safeName || "image"}${finalExt}`;
 
-    // 6. Đảm bảo thư mục lưu trữ tồn tại
+    // 7. Đảm bảo thư mục lưu trữ tồn tại
     const uploadDir = path.join(process.cwd(), "public", "uploads", "images");
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true });
     }
 
-    // 7. Ghi file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // 8. Ghi file và xác minh file đã tồn tại trên đĩa
     const filepath = path.join(uploadDir, filename);
     await writeFile(filepath, buffer);
+
+    if (!existsSync(filepath)) {
+      throw new Error("Không thể xác nhận file đã được lưu trữ thành công trên ổ đĩa");
+    }
 
     const publicUrl = `/uploads/images/${filename}`;
 

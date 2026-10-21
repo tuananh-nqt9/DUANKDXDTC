@@ -10,6 +10,7 @@ import {
   AlertCircle,
   ExternalLink,
   RefreshCw,
+  Loader2,
 } from "lucide-react";
 
 interface ImageUploadProps {
@@ -27,7 +28,10 @@ export default function ImageUpload({
   onChange,
   helperText,
 }: ImageUploadProps) {
+  // imageUrl: URL thực tế trên máy chủ hoặc URL bên ngoài sẽ được lưu vào DB
   const [imageUrl, setImageUrl] = useState(defaultValue);
+  // previewUrl: URL hiển thị tức thì cho người dùng (có thể là Blob URL hoặc server URL)
+  const [previewUrl, setPreviewUrl] = useState(defaultValue);
   const [inputUrl, setInputUrl] = useState(defaultValue);
   const [mode, setMode] = useState<"file" | "url">("file");
   const [uploading, setUploading] = useState(false);
@@ -37,18 +41,35 @@ export default function ImageUpload({
     text: string;
   }>({ type: "", text: "" });
   const [imageError, setImageError] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Đồng bộ defaultValue nếu thay đổi từ ngoài
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const blobUrlRef = useRef<string | null>(null);
+
+  // Dọn dẹp Blob URL khi unmount
+  useEffect(() => {
+    return () => {
+      if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+    };
+  }, []);
+
+  // Đồng bộ defaultValue nếu thay đổi từ component cha (ví dụ khi load dữ liệu chỉnh sửa)
   useEffect(() => {
     if (defaultValue !== imageUrl) {
+      // Nếu có blob cũ thì dọn dẹp
+      if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
       setImageUrl(defaultValue);
+      setPreviewUrl(defaultValue);
       setInputUrl(defaultValue);
       setImageError(false);
     }
   }, [defaultValue]);
 
-  // Cập nhật giá trị ra ngoài
+  // Cập nhật giá trị ra ngoài cho component cha
   const updateUrl = (url: string) => {
     setImageUrl(url);
     setImageError(false);
@@ -64,11 +85,11 @@ export default function ImageUpload({
     e.target.value = "";
 
     // 1. Kiểm tra định dạng
-    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const validMimes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
     const isExtensionValid = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext);
 
-    if (!validTypes.includes(file.type) && !isExtensionValid) {
+    if (!validMimes.includes(file.type) && !isExtensionValid) {
       setStatusMessage({
         type: "error",
         text: "Định dạng không được hỗ trợ! Vui lòng chọn ảnh JPG, JPEG, PNG hoặc WebP.",
@@ -85,6 +106,14 @@ export default function ImageUpload({
       return;
     }
 
+    // 3. TẠO BLOB URL ĐỂ XEM TRƯỚC TỨC THÌ (0ms latency, không sợ lỗi tải)
+    if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+      URL.revokeObjectURL(blobUrlRef.current);
+    }
+    const localBlob = URL.createObjectURL(file);
+    blobUrlRef.current = localBlob;
+    setPreviewUrl(localBlob);
+    setImageError(false);
     setUploading(true);
     setStatusMessage({ type: "", text: "" });
 
@@ -103,13 +132,22 @@ export default function ImageUpload({
         throw new Error(data.error || "Tải ảnh lên máy chủ thất bại");
       }
 
+      // Upload thành công: lưu URL thật của server
       updateUrl(data.url);
       setInputUrl(data.url);
+      setImageError(false);
       setStatusMessage({
         type: "success",
-        text: "✓ Đã tải ảnh lên thành công và sẵn sàng để lưu!",
+        text: "✓ Đã tải ảnh lên máy chủ thành công và sẵn sàng để lưu!",
       });
     } catch (err) {
+      console.error("Image upload error:", err);
+      // Nếu upload thất bại, hoàn tác lại preview
+      if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
+      setPreviewUrl(imageUrl || "");
       setStatusMessage({
         type: "error",
         text: err instanceof Error ? err.message : "Upload thất bại. Vui lòng thử lại.",
@@ -119,10 +157,15 @@ export default function ImageUpload({
     }
   };
 
-  // Kiểm tra và áp dụng URL
+  // Kiểm tra và áp dụng URL thủ công
   const handleApplyUrl = () => {
     const trimmed = inputUrl.trim();
     if (!trimmed) {
+      if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+        URL.revokeObjectURL(blobUrlRef.current);
+        blobUrlRef.current = null;
+      }
+      setPreviewUrl("");
       updateUrl("");
       setStatusMessage({ type: "", text: "" });
       return;
@@ -148,6 +191,7 @@ export default function ImageUpload({
     testImg.onload = () => {
       setValidatingUrl(false);
       setImageError(false);
+      setPreviewUrl(trimmed);
       updateUrl(trimmed);
       setStatusMessage({
         type: "success",
@@ -158,7 +202,7 @@ export default function ImageUpload({
       setValidatingUrl(false);
       setStatusMessage({
         type: "error",
-        text: "⚠️ Không thể tải ảnh từ URL này (URL không tồn tại hoặc bị chặn). Vui lòng kiểm tra lại link.",
+        text: "⚠️ Không thể tải ảnh từ URL này (URL không tồn tại hoặc máy chủ từ chối). Vui lòng kiểm tra lại link.",
       });
     };
     testImg.src = trimmed;
@@ -166,6 +210,11 @@ export default function ImageUpload({
 
   // Xóa ảnh đã chọn
   const handleRemove = () => {
+    if (blobUrlRef.current && blobUrlRef.current.startsWith("blob:")) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    setPreviewUrl("");
     updateUrl("");
     setInputUrl("");
     setImageError(false);
@@ -174,6 +223,8 @@ export default function ImageUpload({
       fileInputRef.current.value = "";
     }
   };
+
+  const hasImage = Boolean(previewUrl || imageUrl);
 
   return (
     <div className="space-y-3">
@@ -212,7 +263,7 @@ export default function ImageUpload({
       <input type="hidden" name={name} value={imageUrl} />
 
       {/* KHUNG PREVIEW HÌNH ẢNH */}
-      {imageUrl && !imageError ? (
+      {hasImage && !imageError ? (
         <div className="relative group border border-gray-200 rounded-xl overflow-hidden bg-slate-900/5 backdrop-blur-sm">
           {/* Background checkerboard cho ảnh transparent */}
           <div
@@ -225,37 +276,57 @@ export default function ImageUpload({
             }}
           >
             <img
-              src={imageUrl}
+              src={previewUrl || imageUrl}
               alt="Xem trước hình ảnh"
               className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
-              onError={() => setImageError(true)}
+              onError={() => {
+                // Chỉ báo lỗi nếu không đang upload
+                if (!uploading) {
+                  setImageError(true);
+                }
+              }}
             />
+
+            {/* Overlay loading khi đang upload */}
+            {uploading && (
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-xs flex flex-col items-center justify-center text-white rounded-xl">
+                <Loader2 className="w-8 h-8 animate-spin text-white mb-2" />
+                <span className="text-xs font-semibold bg-black/60 px-3 py-1 rounded-full">
+                  Đang lưu lên máy chủ...
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Thanh công cụ overlay trên ảnh */}
           <div className="p-3 bg-white border-t border-gray-100 flex items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 truncate text-gray-600">
               <span className="font-semibold text-gray-700">Đường dẫn:</span>
-              <span className="truncate max-w-xs md:max-w-md font-mono">{imageUrl}</span>
+              <span className="truncate max-w-xs md:max-w-md font-mono text-gray-900">
+                {imageUrl || previewUrl}
+              </span>
             </div>
 
             <div className="flex items-center gap-2 flex-shrink-0">
-              <a
-                href={imageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-md transition-colors"
-                title="Mở ảnh gốc trong tab mới"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              {imageUrl && (
+                <a
+                  href={imageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-md transition-colors"
+                  title="Mở ảnh gốc trong tab mới"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
               <button
                 type="button"
                 onClick={() => {
                   if (mode === "file") fileInputRef.current?.click();
                   else handleApplyUrl();
                 }}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors font-medium"
+                disabled={uploading}
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors font-medium disabled:opacity-50"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Đổi ảnh
@@ -263,7 +334,8 @@ export default function ImageUpload({
               <button
                 type="button"
                 onClick={handleRemove}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-md transition-colors font-medium"
+                disabled={uploading}
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-md transition-colors font-medium disabled:opacity-50"
               >
                 <X className="w-3.5 h-3.5" />
                 Xóa
@@ -365,7 +437,7 @@ export default function ImageUpload({
       )}
 
       {/* Trường hợp ảnh tải bị lỗi hiển thị */}
-      {imageError && (
+      {imageError && !uploading && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center justify-between">
           <span className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />

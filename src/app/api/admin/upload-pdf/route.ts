@@ -41,7 +41,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Dung lượng file vượt quá giới hạn cho phép (Tối đa 50MB)!" }, { status: 400 });
     }
 
-    // 5. Chuẩn hóa tên file
+    // 5. Đọc bytes và kiểm tra nội dung file thực tế (PDF signature check)
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    if (buffer.length < 5) {
+      return NextResponse.json({ error: "File rỗng hoặc không phải định dạng PDF!" }, { status: 400 });
+    }
+
+    // PDF files bắt đầu bằng header %PDF
+    const pdfHeader = buffer.subarray(0, 4).toString("ascii");
+    if (pdfHeader !== "%PDF") {
+      return NextResponse.json(
+        { error: "Nội dung file không hợp lệ! Header của file không phải là tài liệu PDF tiêu chuẩn (%PDF)." },
+        { status: 400 }
+      );
+    }
+
+    // 6. Chuẩn hóa tên file
     const timestamp = Date.now();
     const rawName = path.parse(file.name).name;
     const safeName = rawName
@@ -53,17 +70,19 @@ export async function POST(request: NextRequest) {
       .slice(0, 50);
     const filename = `${timestamp}-${safeName || "document"}.pdf`;
 
-    // 6. Đảm bảo thư mục public/documents tồn tại
+    // 7. Đảm bảo thư mục public/documents tồn tại
     const documentsDir = path.join(process.cwd(), "public", "documents");
     if (!existsSync(documentsDir)) {
       await mkdir(documentsDir, { recursive: true });
     }
 
-    // 7. Lưu file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // 8. Lưu file và kiểm tra xác minh ghi đĩa
     const filepath = path.join(documentsDir, filename);
     await writeFile(filepath, buffer);
+
+    if (!existsSync(filepath)) {
+      throw new Error("Không thể xác nhận file PDF đã được ghi thành công vào hệ thống lưu trữ");
+    }
 
     const url = `/documents/${filename}`;
     const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
