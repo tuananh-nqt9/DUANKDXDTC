@@ -29,8 +29,8 @@ export default function NewTestCategoryPage() {
       return;
     }
 
-    if (file.size > 100 * 1024 * 1024) {
-      alert("File không được vượt quá 100MB!");
+    if (file.size > 50 * 1024 * 1024) {
+      alert("Dung lượng file không được vượt quá 50MB!");
       return;
     }
 

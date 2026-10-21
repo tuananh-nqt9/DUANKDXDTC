@@ -55,8 +55,8 @@ export default function EditTestCategoryPage({ params }: { params: { id: string 
       return;
     }
 
-    if (file.size > 100 * 1024 * 1024) {
-      alert("File không được vượt quá 100MB!");
+    if (file.size > 50 * 1024 * 1024) {
+      alert("Dung lượng file không được vượt quá 50MB!");
       return;
     }
 

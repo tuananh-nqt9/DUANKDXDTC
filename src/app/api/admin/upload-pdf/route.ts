@@ -8,7 +8,7 @@ import { verifyToken } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60; // Hỗ trợ upload file lớn đến 60s
 
-const MAX_PDF_SIZE = 100 * 1024 * 1024; // 100MB
+const MAX_PDF_SIZE = 50 * 1024 * 1024; // 50MB chuẩn hóa theo yêu cầu hệ thống
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,9 +37,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Chỉ chấp nhận file định dạng PDF (.pdf)!" }, { status: 400 });
     }
 
-    // 4. Kiểm tra dung lượng
+    // 4. Kiểm tra dung lượng (tối đa 50MB)
     if (file.size > MAX_PDF_SIZE) {
-      return NextResponse.json({ error: "Dung lượng file vượt quá giới hạn cho phép (Tối đa 100MB)!" }, { status: 400 });
+      return NextResponse.json({ error: "Dung lượng file vượt quá giới hạn cho phép (Tối đa 50MB)!" }, { status: 400 });
     }
 
     // 5. Đọc bytes và kiểm tra nội dung file thực tế (PDF signature check theo chuẩn ISO 32000-1)

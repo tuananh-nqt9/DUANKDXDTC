@@ -38,7 +38,7 @@ export async function parseApiResponse<T = any>(
     if (!error) {
       if (status === 413) {
         error =
-          "Dung lượng file vượt quá giới hạn cho phép của máy chủ web (Lỗi 413 Request Entity Too Large). Vui lòng cấu hình 'client_max_body_size' trên Nginx VPS hoặc giảm dung lượng file.";
+          "Dung lượng file vượt quá giới hạn cho phép của máy chủ web (Lỗi 413 Request Entity Too Large). Vui lòng cấu hình 'client_max_body_size 64M;' trên Nginx VPS hoặc chọn file dưới 50MB.";
       } else if (status === 401) {
         error = "Phiên làm việc quản trị đã hết hạn (Lỗi 401). Vui lòng tải lại trang và đăng nhập lại.";
       } else if (status === 403) {

@@ -86,6 +86,11 @@ export default function DocumentsAdminPage() {
   };
 
   const handleUploadPdf = async (file: File, isEdit = false) => {
+    if (file.size > 50 * 1024 * 1024) {
+      setError("Dung lượng file vượt quá giới hạn 50MB!");
+      return;
+    }
+
     setUploading(true);
     try {
       const formDataUpload = new FormData();
