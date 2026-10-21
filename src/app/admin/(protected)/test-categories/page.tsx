@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Plus, Pencil, FileText, CheckCircle, XCircle } from "lucide-react";
 import DeleteCategoryButton from "./DeleteCategoryButton";
+import TestPdfManager from "@/components/admin/TestPdfManager";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,17 @@ export default async function TestCategoriesPage() {
 
   return (
     <div className="p-6">
+      {/* KHU VỰC QUẢN LÝ FILE PDF DANH MỤC CHỈ TIÊU PHÉP THỬ HIỂN THỊ TRÊN WEBSITE */}
+      <TestPdfManager />
+
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Danh mục chỉ tiêu phép thử</h1>
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">Chi tiết các nhóm chỉ tiêu phép thử</h2>
+          <p className="text-xs text-gray-500 mt-0.5">Quản lý các chuyên mục và phép thử thành phần (tùy chọn mở rộng)</p>
+        </div>
         <Link
           href="/admin/test-categories/new"
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Thêm danh mục

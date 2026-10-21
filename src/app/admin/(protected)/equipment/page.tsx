@@ -63,12 +63,15 @@ export default async function EquipmentPage() {
                 >
                   {item.published ? "Hiển thị" : "Ẩn"}
                 </span>
-                <Link
-                  href={`/admin/equipment/${item.id}`}
-                  className="text-blue-600 hover:text-blue-900"
-                >
-                  <Pencil className="w-4 h-4" />
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/admin/equipment/${item.id}`}
+                    className="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded"
+                    title="Chỉnh sửa"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

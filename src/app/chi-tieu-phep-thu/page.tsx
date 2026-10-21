@@ -109,90 +109,62 @@ export default async function TestCategoriesPage() {
           </div>
         </section>
 
-        {/* PDF Documents Section - Giống website cũ */}
-        <section className="py-16 bg-white">
+        {/* PDF Documents Section - Hiển thị tài liệu chính thức từ Admin */}
+        <section className="py-16 bg-white border-t border-gray-200">
           <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Danh mục chỉ tiêu & phép thử
+            <div className="text-center mb-10">
+              <span className="inline-block px-4 py-1 bg-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                VĂN BẢN CÔNG BỐ
+              </span>
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                Danh mục chỉ tiêu &amp; phép thử chính thức
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Tải về hoặc xem trực tiếp danh sách đầy đủ các chỉ tiêu phép thử của phòng thí nghiệm
+                Tài liệu công bố năng lực hoạt động thí nghiệm chuyên ngành xây dựng được Bộ Xây dựng công nhận (LAS-XD 795)
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {/* PDF 1 */}
-              <div className="card p-6">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-6 h-6 text-red-600" />
+            <div className="max-w-5xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-xl">
+              <div className="p-4 bg-white border-b border-gray-200 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
+                    <FileText className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900 mb-1">
-                      Danh mục chỉ tiêu phép thử (Tập 1)
+                    <h3 className="font-bold text-gray-900 text-base">
+                      Công bố thông tin năng lực thí nghiệm LAS-XD 795
                     </h3>
-                    <p className="text-sm text-gray-600">
-                      Các phép thử cơ bản về đất, bê tông, xi măng
-                    </p>
+                    <p className="text-xs text-gray-500">Xem trực tiếp hoặc tải về bản gốc</p>
                   </div>
                 </div>
 
-                <div className="bg-gray-100 rounded-lg overflow-hidden mb-4" style={{ height: '400px' }}>
-                  <iframe
-                    src="/documents/danh-muc-phep-thu-1.pdf"
-                    className="w-full h-full"
-                    title="Danh mục chỉ tiêu phép thử 1"
-                  />
+                <div className="flex items-center gap-3">
+                  <a
+                    href="/documents/thanh-chuong-cbhs.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary !text-gray-700 !py-2 !px-4 text-sm"
+                  >
+                    Mở tab mới
+                  </a>
+                  <a
+                    href="/documents/thanh-chuong-cbhs.pdf"
+                    download="danh-muc-chi-tieu-las-xd-795.pdf"
+                    className="btn-primary !bg-red-600 hover:!bg-red-700 !py-2 !px-4 text-sm inline-flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Tải về PDF
+                  </a>
                 </div>
-
-                <DownloadButton
-                  href="/documents/danh-muc-phep-thu-1.pdf"
-                  className="btn-primary w-full justify-center"
-                >
-                  <Download className="w-4 h-4" />
-                  Tải về PDF (Tập 1)
-                </DownloadButton>
               </div>
 
-              {/* PDF 2 */}
-              <div className="card p-6">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-gray-900 mb-1">
-                      Danh mục chỉ tiêu phép thử (Tập 2)
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Các phép thử nâng cao về nền móng, kiểm định công trình
-                    </p>
-                  </div>
-                </div>
-
-                <div className="bg-gray-100 rounded-lg overflow-hidden mb-4" style={{ height: '400px' }}>
-                  <iframe
-                    src="/documents/danh-muc-phep-thu-2.pdf"
-                    className="w-full h-full"
-                    title="Danh mục chỉ tiêu phép thử 2"
-                  />
-                </div>
-
-                <DownloadButton
-                  href="/documents/danh-muc-phep-thu-2.pdf"
-                  className="btn-primary w-full justify-center"
-                >
-                  <Download className="w-4 h-4" />
-                  Tải về PDF (Tập 2)
-                </DownloadButton>
+              <div className="w-full h-[700px] md:h-[800px] bg-slate-800">
+                <iframe
+                  src="/documents/thanh-chuong-cbhs.pdf#toolbar=1&navpanes=1"
+                  className="w-full h-full border-0"
+                  title="Danh mục chỉ tiêu và phép thử LAS-XD 795"
+                />
               </div>
-            </div>
-
-            <div className="text-center mt-8">
-              <p className="text-sm text-gray-500">
-                Nếu không xem được PDF trực tiếp, vui lòng tải về để xem
-              </p>
             </div>
           </div>
         </section>

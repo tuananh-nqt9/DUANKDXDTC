@@ -146,3 +146,11 @@ model Document {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+// Setting - Cấu hình hệ thống và tài liệu chuyên biệt (PDF chỉ tiêu phép thử, v.v.)
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
