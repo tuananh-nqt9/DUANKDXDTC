@@ -49,6 +49,7 @@ model Project {
   excerpt     String?
   content     String?
   image       String?
+  order       Int      @default(0)
   featured    Boolean  @default(false)
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -152,5 +153,19 @@ model Setting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+// TestParameterPdf - Danh mục các tài liệu PDF Chỉ tiêu phép thử (hỗ trợ nhiều tài liệu)
+model TestParameterPdf {
+  id          String   @id @default(cuid())
+  title       String   // Tiêu đề: "Công bố thông tin về năng lực LAS-XD 795", "Danh mục chỉ tiêu phép thử 2026", ...
+  description String?  // Mô tả ngắn
+  pdfUrl      String   // Đường dẫn file PDF: /documents/xxx.pdf
+  fileName    String?  // Tên file gốc: thanh-chuong-cbhs.pdf
+  fileSize    String?  // Kích thước file: "3.69 MB"
+  order       Int      @default(0) // Thứ tự hiển thị
+  published   Boolean  @default(true) // Công khai hoặc ẩn
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 

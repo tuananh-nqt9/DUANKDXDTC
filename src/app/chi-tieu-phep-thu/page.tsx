@@ -5,14 +5,15 @@ import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import { DownloadButton } from "@/components/DownloadButton";
 import { prisma } from "@/lib/prisma";
-import { FlaskConical, TestTube, ArrowRight, FileText, Shield, Download, HardDrive, Calendar } from "lucide-react";
-import { getTestParametersPdf } from "@/lib/test-pdf-service";
+import { FlaskConical, TestTube, ArrowRight, Shield, FileText } from "lucide-react";
+import { getPublishedTestParameterPdfs } from "@/lib/test-pdf-service";
+import TestParametersPdfList from "@/components/TestParametersPdfList";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function TestCategoriesPage() {
-  const [categories, pdfData] = await Promise.all([
+  const [categories, documents] = await Promise.all([
     prisma.testCategory.findMany({
       where: { published: true },
       include: {
@@ -22,21 +23,8 @@ export default async function TestCategoriesPage() {
       },
       orderBy: { order: "asc" },
     }),
-    getTestParametersPdf(),
+    getPublishedTestParameterPdfs(),
   ]);
-
-  const { title, pdfUrl, fileName, fileSize, updatedAt, isPublished } = pdfData;
-  const timestamp = updatedAt ? new Date(updatedAt).getTime() : Date.now();
-  const cacheBustedUrl = pdfUrl ? `${pdfUrl}?v=${timestamp}` : "";
-  const embedUrl = pdfUrl ? `${cacheBustedUrl}#toolbar=1&navpanes=1` : "";
-
-  const formattedDate = updatedAt
-    ? new Date(updatedAt).toLocaleDateString("vi-VN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    : null;
 
   return (
     <>
@@ -127,77 +115,16 @@ export default async function TestCategoriesPage() {
           </div>
         </section>
 
-        {/* PDF Documents Section - Hiển thị tài liệu chính thức từ Admin */}
-        {isPublished && pdfUrl && (
+        {/* PDF Documents Section - Hiển thị toàn bộ tài liệu chính thức từ Admin */}
+        {documents && documents.length > 0 && (
           <section id="tai-lieu-chinh-thuc" className="py-16 bg-white border-t border-gray-200">
             <div className="container-custom">
-              <div className="text-center mb-10">
-                <span className="inline-block px-4 py-1 bg-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-                  VĂN BẢN CÔNG BỐ
-                </span>
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">
-                  Danh mục chỉ tiêu &amp; phép thử chính thức
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  {title || "Tài liệu công bố năng lực hoạt động thí nghiệm chuyên ngành xây dựng được Bộ Xây dựng công nhận (LAS-XD 795)"}
-                </p>
-              </div>
-
-              <div className="max-w-5xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-xl">
-                <div className="p-4 bg-white border-b border-gray-200 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-gray-900 text-base truncate">
-                        {title || "Công bố thông tin năng lực thí nghiệm LAS-XD 795"}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mt-0.5">
-                        {fileSize && (
-                          <span className="flex items-center gap-1 font-medium">
-                            <HardDrive className="w-3.5 h-3.5" />
-                            {fileSize}
-                          </span>
-                        )}
-                        {formattedDate && (
-                          <span className="flex items-center gap-1 font-medium">
-                            <Calendar className="w-3.5 h-3.5" />
-                            Cập nhật: {formattedDate}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={cacheBustedUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary !text-gray-700 !py-2 !px-4 text-sm"
-                    >
-                      Mở tab mới
-                    </a>
-                    <a
-                      href={cacheBustedUrl}
-                      download={fileName || "danh-muc-chi-tieu-las-xd-795.pdf"}
-                      className="btn-primary !bg-red-600 hover:!bg-red-700 !py-2 !px-4 text-sm inline-flex items-center gap-2"
-                    >
-                      <Download className="w-4 h-4" />
-                      Tải về PDF
-                    </a>
-                  </div>
-                </div>
-
-                <div className="w-full h-[700px] md:h-[850px] bg-slate-800">
-                  <iframe
-                    src={embedUrl}
-                    className="w-full h-full border-0"
-                    title={title || "Danh mục chỉ tiêu và phép thử LAS-XD 795"}
-                  />
-                </div>
-              </div>
+              <TestParametersPdfList
+                documents={documents}
+                title="Danh mục chỉ tiêu & phép thử chính thức"
+                subtitle="Văn bản công bố năng lực hoạt động thí nghiệm chuyên ngành xây dựng được Bộ Xây dựng công nhận (LAS-XD 795)"
+                showCategoryHeading={true}
+              />
             </div>
           </section>
         )}

@@ -13,12 +13,12 @@ const nextConfig = {
       { protocol: "http", hostname: "**" },
     ],
   },
+  trailingSlash: false,
   experimental: {
     serverActions: {
       allowedOrigins: ["localhost:3000", "kdxdthanhchuong.vn"],
       bodySizeLimit: "100mb",
     },
-    scrollRestoration: true,
   },
 };
 

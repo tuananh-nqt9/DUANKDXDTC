@@ -53,7 +53,15 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export default async function HomePage() {
   const [services, projects, posts] = await Promise.all([
     prisma.service.findMany({ where: { published: true }, orderBy: { order: "asc" }, take: 6 }),
-    prisma.project.findMany({ where: { published: true, featured: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+    prisma.project.findMany({
+      where: { published: true },
+      orderBy: [
+        { featured: "desc" },
+        { order: "asc" },
+        { createdAt: "desc" },
+      ],
+      take: 6,
+    }),
     prisma.post.findMany({ where: { published: true }, orderBy: { publishedAt: "desc" }, take: 3 }),
   ]);
 

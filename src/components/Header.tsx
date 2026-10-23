@@ -48,6 +48,7 @@ export function Header() {
     { href: "/", label: "Trang chủ" },
     { href: "/gioi-thieu", label: "Giới thiệu" },
     { href: "/dich-vu", label: "Ngành nghề" },
+    { href: "/trang-thiet-bi", label: "Trang thiết bị" },
     { href: "/du-an", label: "Dự án" },
     { href: "/tin-tuc", label: "Tin tức" },
     { href: "/lien-he", label: "Liên hệ" },

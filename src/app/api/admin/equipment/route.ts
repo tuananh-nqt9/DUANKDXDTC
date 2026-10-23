@@ -63,7 +63,10 @@ export async function POST(req: Request) {
 
     revalidatePath("/");
     revalidatePath("/trang-thiet-bi");
+    revalidatePath(`/trang-thiet-bi/${uniqueSlug}`);
+    revalidatePath("/trang-thiet-bi/[slug]", "page");
     revalidatePath("/admin/equipment");
+    revalidatePath("/", "layout");
 
     return NextResponse.json(equipment, { status: 201 });
   } catch (error) {

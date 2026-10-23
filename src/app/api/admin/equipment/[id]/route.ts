@@ -86,7 +86,10 @@ export async function PUT(
 
     revalidatePath("/");
     revalidatePath("/trang-thiet-bi");
+    revalidatePath(`/trang-thiet-bi/${equipment.slug}`);
+    revalidatePath("/trang-thiet-bi/[slug]", "page");
     revalidatePath("/admin/equipment");
+    revalidatePath("/", "layout");
 
     return NextResponse.json(equipment);
   } catch (error) {
@@ -111,11 +114,17 @@ export async function DELETE(
     }
 
     const { id } = params;
+    const existing = await prisma.equipment.findUnique({ where: { id } });
     await prisma.equipment.delete({ where: { id } });
 
     revalidatePath("/");
     revalidatePath("/trang-thiet-bi");
+    if (existing?.slug) {
+      revalidatePath(`/trang-thiet-bi/${existing.slug}`);
+    }
+    revalidatePath("/trang-thiet-bi/[slug]", "page");
     revalidatePath("/admin/equipment");
+    revalidatePath("/", "layout");
 
     return NextResponse.json({ success: true });
   } catch (error) {

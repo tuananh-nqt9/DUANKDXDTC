@@ -2,39 +2,45 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
 import {
+  getAllTestParameterPdfs,
   getTestParametersPdf,
-  saveTestParametersPdf,
-  SETTING_KEY,
+  createTestParameterPdf,
+  updateTestParameterPdf,
+  deleteTestParameterPdf,
+  reorderTestParameterPdfs,
 } from "@/lib/test-pdf-service";
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import path from "path";
-import { existsSync } from "fs";
-import { unlink } from "fs/promises";
 
 export const dynamic = "force-dynamic";
 
-// GET - Lấy thông tin tài liệu PDF Chỉ tiêu phép thử hiện tại
+// GET - Lấy danh sách toàn bộ tài liệu PDF (kèm tài liệu đầu tiên cho backward compatibility)
 export async function GET() {
   try {
-    const data = await getTestParametersPdf();
-    return NextResponse.json(data);
+    const [list, primary] = await Promise.all([
+      getAllTestParameterPdfs(),
+      getTestParametersPdf(),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      list,
+      ...primary,
+    });
   } catch (error) {
     console.error("Error fetching test parameters PDF:", error);
     return NextResponse.json(
-      { error: "Không thể lấy thông tin tài liệu PDF" },
+      { error: "Không thể lấy thông tin danh sách tài liệu PDF" },
       { status: 500 }
     );
   }
 }
 
-// POST - Cập nhật thông tin tài liệu PDF
+// POST - Thêm mới, cập nhật hoặc thay đổi thứ tự tài liệu PDF
 export async function POST(request: NextRequest) {
   try {
     // 1. Kiểm tra xác thực Admin
     const token = cookies().get("auth-token")?.value || cookies().get("admin-token")?.value;
     if (!token) {
-      return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
+      return NextResponse.json({ error: "Chưa đăng nhập quản trị viên" }, { status: 401 });
     }
 
     const session = await verifyToken(token);
@@ -42,29 +48,66 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Phiên đăng nhập hết hạn" }, { status: 401 });
     }
 
-    // 2. Nhận dữ liệu cập nhật
+    // 2. Nhận dữ liệu
     const body = await request.json();
-    const { title, pdfUrl, fileName, fileSize, isPublished } = body;
+    const { action, id, title, description, pdfUrl, fileName, fileSize, isPublished, published, order, items } = body;
 
-    if (!pdfUrl || !pdfUrl.trim()) {
-      return NextResponse.json(
-        { error: "Đường dẫn file PDF không được để trống" },
-        { status: 400 }
-      );
+    // Xử lý reorder
+    if (action === "reorder" && Array.isArray(items)) {
+      await reorderTestParameterPdfs(items);
+      const updatedList = await getAllTestParameterPdfs();
+      return NextResponse.json({ success: true, list: updatedList });
     }
 
-    const savedData = await saveTestParametersPdf({
-      title,
-      pdfUrl,
-      fileName,
-      fileSize,
-      isPublished: isPublished !== false,
-    });
+    // Xử lý tạo mới
+    if (action === "create" || (!id && action !== "update")) {
+      if (!title || !title.trim()) {
+        return NextResponse.json({ error: "Tiêu đề tài liệu không được để trống" }, { status: 400 });
+      }
+      if (!pdfUrl || !pdfUrl.trim()) {
+        return NextResponse.json({ error: "Đường dẫn file PDF không được để trống" }, { status: 400 });
+      }
 
-    return NextResponse.json({
-      success: true,
-      data: savedData,
-    });
+      const created = await createTestParameterPdf({
+        title,
+        description,
+        pdfUrl,
+        fileName,
+        fileSize,
+        order,
+        published: published !== undefined ? published : (isPublished !== false),
+      });
+
+      const updatedList = await getAllTestParameterPdfs();
+      return NextResponse.json({
+        success: true,
+        data: created,
+        list: updatedList,
+      });
+    }
+
+    // Xử lý cập nhật / thay thế tài liệu đang có
+    if (id) {
+      const updated = await updateTestParameterPdf(id, {
+        ...(title !== undefined && { title }),
+        ...(description !== undefined && { description }),
+        ...(pdfUrl !== undefined && { pdfUrl }),
+        ...(fileName !== undefined && { fileName }),
+        ...(fileSize !== undefined && { fileSize }),
+        ...(order !== undefined && { order }),
+        ...(published !== undefined && { published }),
+        ...(isPublished !== undefined && { published: isPublished }),
+      });
+
+      const updatedList = await getAllTestParameterPdfs();
+      return NextResponse.json({
+        success: true,
+        data: updated,
+        list: updatedList,
+      });
+    }
+
+    return NextResponse.json({ error: "Yêu cầu không hợp lệ" }, { status: 400 });
   } catch (error) {
     console.error("Error saving test parameters PDF:", error);
     return NextResponse.json(
@@ -74,8 +117,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE - Xóa tài liệu PDF (hoặc đưa về mặc định)
-export async function DELETE() {
+// DELETE - Xóa tài liệu PDF được chọn
+export async function DELETE(request: NextRequest) {
   try {
     const token = cookies().get("auth-token")?.value || cookies().get("admin-token")?.value;
     if (!token) {
@@ -87,35 +130,31 @@ export async function DELETE() {
       return NextResponse.json({ error: "Phiên đăng nhập hết hạn" }, { status: 401 });
     }
 
-    const setting = await prisma.setting.findUnique({
-      where: { key: SETTING_KEY },
-    });
+    const { searchParams } = new URL(request.url);
+    let id = searchParams.get("id");
 
-    if (setting?.value) {
+    if (!id) {
       try {
-        const parsed = JSON.parse(setting.value);
-        if (
-          parsed.pdfUrl &&
-          parsed.pdfUrl.startsWith("/documents/") &&
-          !parsed.pdfUrl.includes("thanh-chuong-cbhs.pdf") // Không xóa file gốc hệ thống
-        ) {
-          const filePath = path.join(process.cwd(), "public", parsed.pdfUrl);
-          if (existsSync(filePath)) {
-            await unlink(filePath).catch(() => {});
-          }
-        }
+        const body = await request.json();
+        id = body?.id;
       } catch {}
     }
 
-    await prisma.setting.delete({
-      where: { key: SETTING_KEY },
-    }).catch(() => {});
+    if (!id) {
+      return NextResponse.json({ error: "Thiếu ID tài liệu cần xóa" }, { status: 400 });
+    }
 
-    revalidatePath("/");
-    revalidatePath("/chi-tieu-phep-thu");
-    revalidatePath("/admin/test-categories");
+    const success = await deleteTestParameterPdf(id);
+    if (!success) {
+      return NextResponse.json({ error: "Không tìm thấy tài liệu để xóa" }, { status: 404 });
+    }
 
-    return NextResponse.json({ success: true, message: "Đã xóa tài liệu PDF" });
+    const updatedList = await getAllTestParameterPdfs();
+    return NextResponse.json({
+      success: true,
+      message: "Đã xóa tài liệu PDF thành công",
+      list: updatedList,
+    });
   } catch (error) {
     console.error("Error deleting test parameters PDF:", error);
     return NextResponse.json(
