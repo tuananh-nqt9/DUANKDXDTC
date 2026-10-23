@@ -26,7 +26,7 @@ export const COMPANY = {
   // Thông tin liên hệ
   contact: {
     hotline: "0939688669",
-    phone: "09396886699",
+    phone: "0939688669",
     email: "Thanhchuong.jsc@gmail.com",
     website: "https://kdxdthanhchuong.vn",
     fax: "(04) 62917569",
@@ -39,7 +39,7 @@ export const COMPANY = {
       city: "Hà Nội",
       type: "Phòng thí nghiệm",
       address: "Xóm Lai, thôn Phù Dực 1, xã Phù Đổng, thành phố Hà Nội",
-      phone: "09396886699",
+      phone: "0939688669",
       map: "https://maps.google.com/?q=Xóm+Lai,Phù+Dực+1,Phù+Đổng,Hà+Nội",
       // Google Maps Embed
       embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.8639849729453!2d105.83991541533315!3d21.036765793369467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDAyJzEyLjQiTiAxMDXCsDUwJzI3LjYiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s",
@@ -53,7 +53,7 @@ export const COMPANY = {
       city: "Bắc Ninh",
       type: "Văn phòng",
       address: "Số 508, đường Nguyễn Văn Cừ, P. Võ Cường, tỉnh Bắc Ninh",
-      phone: "09396886699",
+      phone: "0939688669",
       map: "https://maps.google.com/?q=508+Nguyễn+Văn+Cừ,Võ+Cường,Bắc+Ninh",
       // Google Maps Embed
       embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.8639849729453!2d106.07591541533315!3d21.136765793369467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA4JzEyLjQiTiAxMDbCsDA0JzI3LjYiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s",
