@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
@@ -64,29 +65,31 @@ export default async function PostDetailPage({ params }: { params: { slug: strin
       <TopBar />
       <Header />
       <main className="flex-1">
-        <article className="container-custom max-w-4xl py-12">
-          <div className="text-sm text-gray-500 mb-3">
+        <article className="container-custom max-w-4xl py-8 sm:py-12">
+          <div className="text-xs sm:text-sm text-gray-500 mb-3">
             {post.publishedAt && formatDate(post.publishedAt)} • {post.category}
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{post.title}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 break-words leading-tight">{post.title}</h1>
 
           {post.image && (
-            <div className="relative h-96 rounded-2xl overflow-hidden mb-8">
+            <div className="relative aspect-[16/10] sm:h-96 rounded-2xl overflow-hidden mb-6 sm:mb-8 w-full max-w-full">
               <Image src={post.image} alt={post.title} fill className="object-cover" />
             </div>
           )}
 
           {post.excerpt && (
-            <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">{post.excerpt}</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-6 sm:mb-8 leading-relaxed font-medium break-words">{post.excerpt}</p>
           )}
 
           <div
-            className="prose prose-lg max-w-none"
+            className="prose prose-base sm:prose-lg max-w-none break-words"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
       </main>
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 }
+

@@ -93,25 +93,27 @@ export function Header() {
           <button
             className="lg:hidden p-2 text-gray-700 hover:text-primary-600 transition-all duration-300 hover:bg-primary-50 rounded-lg active:scale-95"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Đóng menu" : "Mở menu"}
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
         {mobileOpen && (
-          <nav className="lg:hidden border-t border-gray-200 py-4 space-y-1 animate-fade-in">
+          <nav className="lg:hidden border-t border-gray-200 py-3 space-y-1 animate-fade-in max-h-[calc(100vh-5rem)] overflow-y-auto">
             {navLinks.map((link, idx) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`block px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-600 rounded-lg font-medium transition-all duration-300 animate-slide-in-left stagger-${idx + 1}`}
+                className={`block px-4 py-2.5 text-gray-800 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-600 rounded-lg font-medium transition-all duration-200 animate-slide-in-left stagger-${idx + 1}`}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 px-4">
-              <Link href="/lien-he" className="btn-primary w-full !py-3 text-sm" onClick={() => setMobileOpen(false)}>
+            <div className="pt-2 px-4 pb-2">
+              <Link href="/lien-he" className="btn-primary w-full !py-2.5 text-sm justify-center" onClick={() => setMobileOpen(false)}>
                 <Phone className="w-4 h-4" />
                 Tư vấn ngay
               </Link>

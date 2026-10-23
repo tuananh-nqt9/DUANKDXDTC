@@ -1,5 +1,6 @@
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -69,18 +70,18 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       <TopBar />
       <Header />
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-blue-900 to-blue-800 text-white py-16">
+        <section className="bg-gradient-to-br from-primary-900 to-primary-800 text-white py-12 sm:py-16">
           <div className="container-custom">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                <IconComp className="w-8 h-8 text-white" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
+                <IconComp className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold">{service.title}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold break-words">{service.title}</h1>
             </div>
           </div>
         </section>
 
-        <section className="py-16">
+        <section className="py-12 sm:py-16">
           <div className="container-custom max-w-4xl">
             {service.image && (
               <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-md bg-gray-50 flex justify-center">
@@ -96,33 +97,34 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             )}
 
             {service.excerpt && (
-              <p className="text-xl text-gray-700 mb-8 leading-relaxed">{service.excerpt}</p>
+              <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-8 leading-relaxed">{service.excerpt}</p>
             )}
 
             {service.content && (
               <div
-                className="prose prose-lg max-w-none mb-12"
+                className="prose prose-lg max-w-none mb-12 break-words"
                 dangerouslySetInnerHTML={{ __html: service.content }}
               />
             )}
 
-            <div className="bg-blue-50 rounded-xl p-6">
-              <h3 className="font-bold text-gray-900 mb-3">Cam kết của chúng tôi:</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5" /> Phòng thí nghiệm đạt chuẩn LAS-XD 795</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5" /> Kỹ sư có chứng chỉ hành nghề</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5" /> Báo cáo nhanh chóng, chính xác</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5" /> Giá cả cạnh tranh</li>
+            <div className="bg-primary-50/60 border border-primary-100 rounded-xl p-5 sm:p-6">
+              <h3 className="font-bold text-gray-900 mb-3 text-base sm:text-lg">Cam kết của chúng tôi:</h3>
+              <ul className="space-y-2 text-sm sm:text-base text-gray-700">
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" /> Phòng thí nghiệm đạt chuẩn LAS-XD 795</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" /> Kỹ sư có chứng chỉ hành nghề</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" /> Báo cáo nhanh chóng, chính xác</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" /> Giá cả cạnh tranh</li>
               </ul>
             </div>
 
-            <div className="mt-12 text-center">
-              <a href="/lien-he" className="btn-primary">Yêu cầu tư vấn miễn phí</a>
+            <div className="mt-8 sm:mt-12 text-center">
+              <a href="/lien-he" className="btn-primary w-full sm:w-auto text-sm sm:text-base py-3 px-6 justify-center">Yêu cầu tư vấn miễn phí</a>
             </div>
           </div>
         </section>
       </main>
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 }

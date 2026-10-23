@@ -1,5 +1,6 @@
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { Shield, Lock, Eye, UserCheck, FileText, AlertCircle } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
 
@@ -16,7 +17,7 @@ export default function PrivacyPolicyPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-900 to-primary-800 text-white py-16">
+        <section className="bg-gradient-to-br from-primary-900 to-primary-800 text-white py-12 sm:py-16">
           <div className="container-custom">
             <div className="flex items-center gap-2 mb-3">
               <Lock className="w-5 h-5 text-secondary-400" />
@@ -24,24 +25,24 @@ export default function PrivacyPolicyPage() {
                 Privacy Policy
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-3">Chính sách bảo mật</h1>
-            <p className="text-primary-200 text-lg">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 break-words">Chính sách bảo mật</h1>
+            <p className="text-primary-200 text-base sm:text-lg">
               Cam kết bảo vệ thông tin cá nhân của khách hàng
             </p>
           </div>
         </section>
 
         {/* Content */}
-        <section className="py-16">
+        <section className="py-12 sm:py-16">
           <div className="container-custom max-w-4xl">
             
             {/* Introduction */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-8">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-lg mb-8">
               <div className="flex items-start gap-3">
                 <Shield className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h2 className="font-bold text-blue-900 mb-2">Cam kết của chúng tôi</h2>
-                  <p className="text-blue-800 text-sm leading-relaxed">
+                  <h2 className="font-bold text-blue-900 mb-2 text-base sm:text-lg">Cam kết của chúng tôi</h2>
+                  <p className="text-blue-800 text-xs sm:text-sm leading-relaxed">
                     {COMPANY.shortName} cam kết bảo vệ thông tin cá nhân của khách hàng. 
                     Chính sách này mô tả cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn.
                   </p>
@@ -50,17 +51,17 @@ export default function PrivacyPolicyPage() {
             </div>
 
             {/* Main Content */}
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-base sm:prose-lg max-w-none break-words">
               
               {/* Section 1 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FileText className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">1. Thông tin chúng tôi thu thập</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">1. Thông tin chúng tôi thu thập</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Chúng tôi có thể thu thập các thông tin sau khi bạn sử dụng dịch vụ:</p>
                   <ul className="space-y-2">
                     <li><strong>Thông tin cá nhân:</strong> Họ tên, số điện thoại, email, địa chỉ</li>
@@ -73,13 +74,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 2 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Eye className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">2. Cách chúng tôi sử dụng thông tin</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">2. Cách chúng tôi sử dụng thông tin</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Thông tin của bạn được sử dụng cho các mục đích sau:</p>
                   <ul className="space-y-2">
                     <li>Cung cấp dịch vụ tư vấn, thí nghiệm, kiểm định xây dựng</li>
@@ -93,13 +94,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 3 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Lock className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">3. Bảo vệ thông tin</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">3. Bảo vệ thông tin</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Chúng tôi áp dụng các biện pháp bảo mật để bảo vệ thông tin của bạn:</p>
                   <ul className="space-y-2">
                     <li>Mã hóa dữ liệu khi truyền tải (SSL/TLS)</li>
@@ -113,13 +114,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 4 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <UserCheck className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">4. Chia sẻ thông tin</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">4. Chia sẻ thông tin</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Chúng tôi <strong>KHÔNG</strong> bán hoặc cho thuê thông tin cá nhân của bạn.</p>
                   <p>Thông tin chỉ được chia sẻ trong các trường hợp sau:</p>
                   <ul className="space-y-2">
@@ -133,13 +134,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 5 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <AlertCircle className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">5. Quyền của bạn</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">5. Quyền của bạn</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Bạn có các quyền sau đối với thông tin cá nhân:</p>
                   <ul className="space-y-2">
                     <li><strong>Quyền truy cập:</strong> Yêu cầu xem thông tin chúng tôi lưu trữ</li>
@@ -158,13 +159,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 6 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FileText className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">6. Cookie và công nghệ theo dõi</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">6. Cookie và công nghệ theo dõi</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>Website sử dụng cookie để cải thiện trải nghiệm người dùng:</p>
                   <ul className="space-y-2">
                     <li><strong>Cookie cần thiết:</strong> Đảm bảo website hoạt động bình thường</li>
@@ -177,13 +178,13 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 7 */}
               <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Shield className="w-5 h-5 text-primary-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 m-0">7. Thay đổi chính sách</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 m-0 break-words">7. Thay đổi chính sách</h2>
                 </div>
-                <div className="ml-13 space-y-4 text-gray-700">
+                <div className="pl-2 sm:pl-12 space-y-3 text-sm sm:text-base text-gray-700">
                   <p>
                     Chúng tôi có thể cập nhật chính sách này theo thời gian. 
                     Mọi thay đổi sẽ được thông báo trên website và có hiệu lực ngay khi đăng tải.
@@ -197,30 +198,30 @@ export default function PrivacyPolicyPage() {
             </div>
 
             {/* Contact Box */}
-            <div className="mt-12 bg-gradient-to-br from-primary-900 to-primary-800 text-white rounded-xl p-8">
-              <h3 className="text-2xl font-bold mb-4">Cần hỗ trợ?</h3>
-              <p className="text-primary-100 mb-6">
+            <div className="mt-8 sm:mt-12 bg-gradient-to-br from-primary-900 to-primary-800 text-white rounded-xl p-5 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Cần hỗ trợ?</h3>
+              <p className="text-primary-100 mb-6 text-sm sm:text-base leading-relaxed">
                 Nếu bạn có câu hỏi về chính sách bảo mật hoặc cách chúng tôi xử lý thông tin, 
                 vui lòng liên hệ với chúng tôi:
               </p>
-              <div className="grid md:grid-cols-2 gap-4 text-sm">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+                <div className="min-w-0">
                   <p className="font-semibold mb-1">Email:</p>
-                  <a href={`mailto:${COMPANY.contact.email}`} className="text-secondary-400 hover:text-secondary-300">
+                  <a href={`mailto:${COMPANY.contact.email}`} className="text-secondary-400 hover:text-secondary-300 break-words">
                     {COMPANY.contact.email}
                   </a>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="font-semibold mb-1">Hotline:</p>
                   <a href={`tel:${COMPANY.contact.hotline}`} className="text-secondary-400 hover:text-secondary-300">
                     {COMPANY.contact.hotline}
                   </a>
                 </div>
-                <div>
+                <div className="min-w-0 sm:col-span-2">
                   <p className="font-semibold mb-1">Địa chỉ:</p>
-                  <p className="text-primary-100">{COMPANY.offices[0].address}</p>
+                  <p className="text-primary-100 leading-relaxed">{COMPANY.offices[0].address}</p>
                 </div>
-                <div>
+                <div className="min-w-0 sm:col-span-2">
                   <p className="font-semibold mb-1">Giờ làm việc:</p>
                   <p className="text-primary-100">{COMPANY.workingHours.weekdays}</p>
                 </div>
@@ -232,6 +233,8 @@ export default function PrivacyPolicyPage() {
       </main>
 
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 }
+

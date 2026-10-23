@@ -31,7 +31,7 @@ export function Footer() {
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl" />
       
-      <div className="container-custom py-16 relative z-10">
+      <div className="container-custom py-12 sm:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
@@ -158,7 +158,7 @@ export function Footer() {
                   <span>
                     <strong className="text-white group-hover:text-primary-300 transition-colors duration-300">{office.city} ({office.type}):</strong>
                     <br />
-                    <span className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{office.address}</span>
+                    <span className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 break-words">{office.address}</span>
                   </span>
                 </li>
               ))}
@@ -186,13 +186,13 @@ export function Footer() {
       <div className="border-t border-gradient-to-r from-transparent via-gray-700 to-transparent relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
         
-        <div className="container-custom py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 relative z-10">
-          <p className="flex items-center gap-2">
-            © 2026 {COMPANY.shortName}. 
-            <span className="hidden md:inline text-gray-600">|</span>
+        <div className="container-custom py-6 flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm text-gray-400 relative z-10 text-center md:text-left gap-3 md:gap-0">
+          <p className="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2">
+            <span>© 2026 {COMPANY.shortName}.</span>
+            <span className="hidden sm:inline text-gray-600">|</span>
             <span className="text-gray-500">All rights reserved.</span>
           </p>
-          <div className="flex items-center gap-4 mt-3 md:mt-0">
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mt-2 md:mt-0">
             <Link href="/chinh-sach-bao-mat" className="hover:text-primary-400 transition-all duration-300 relative group">
               <span className="relative">
                 Chính sách bảo mật
