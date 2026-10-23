@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { DownloadLink } from "@/components/DownloadButton";
 import { Award, Users, Building2, FlaskConical, CheckCircle, Shield, Target, Lightbulb, TrendingUp, Download, FileText } from "lucide-react";
 import { COMPANY, STATS, TEAM_MEMBERS } from "@/lib/constants";
@@ -285,6 +285,7 @@ export default function AboutPage() {
       </main>
 
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 }

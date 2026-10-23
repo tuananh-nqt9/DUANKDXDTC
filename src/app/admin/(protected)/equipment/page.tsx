@@ -1,15 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import { Plus, Edit, Trash2, Eye, EyeOff, Wrench, ExternalLink, Sparkles, MapPin, Package, Calendar } from "lucide-react";
+import { Plus, Edit, Eye, EyeOff, Wrench, ExternalLink, Sparkles, MapPin, Package, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { toggleEquipmentPublish, toggleEquipmentFeatured, deleteEquipment } from "./actions";
+import AdminDeleteButton from "@/components/admin/AdminDeleteButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function EquipmentPage() {
-  const equipment = await prisma.equipment.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-  });
+  let equipment: any[] = [];
+  try {
+    equipment = await prisma.equipment.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+    });
+  } catch (err) {
+    console.warn("Could not query equipment with order sort, falling back to createdAt:", err);
+    try {
+      equipment = await prisma.equipment.findMany({
+        orderBy: { createdAt: "desc" },
+      });
+    } catch (err2) {
+      console.error("Critical error querying equipment:", err2);
+      equipment = [];
+    }
+  }
 
   const totalCount = equipment.length;
   const publishedCount = equipment.filter((e) => e.published).length;
@@ -25,7 +39,7 @@ export default async function EquipmentPage() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Quản lý Trang thiết bị</h1>
           </div>
           <p className="text-gray-500 text-sm">
-            Danh mục thiết bị thí nghiệm, kiểm định và khảo sát công trình của công ty Thanh Chương
+            Danh sách thiết bị thí nghiệm, kiểm định và khảo sát công trình của công ty Thanh Chương
           </p>
         </div>
         <Link href="/admin/equipment/new" className="btn-primary flex items-center gap-2 self-start sm:self-auto">
@@ -85,7 +99,7 @@ export default async function EquipmentPage() {
                   <tr key={item.id} className="hover:bg-gray-50/80 transition-colors">
                     {/* Thứ tự */}
                     <td className="px-5 py-4 text-center font-semibold text-gray-500">
-                      #{item.order}
+                      #{item.order ?? 0}
                     </td>
 
                     {/* Hình ảnh */}
@@ -94,7 +108,7 @@ export default async function EquipmentPage() {
                         {item.image ? (
                           <Image
                             src={item.image}
-                            alt={item.name}
+                            alt={item.name || "Thiết bị"}
                             fill
                             className="object-cover"
                             sizes="80px"
@@ -216,22 +230,12 @@ export default async function EquipmentPage() {
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
-                        <form
-                          action={deleteEquipment.bind(null, item.id)}
-                          onSubmit={(e) => {
-                            if (!confirm(`Bạn có chắc chắn muốn xóa thiết bị "${item.name}" không?`)) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          <button
-                            type="submit"
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Xóa thiết bị"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </form>
+                        <AdminDeleteButton
+                          itemId={item.id}
+                          itemName={item.name}
+                          deleteAction={deleteEquipment}
+                          confirmMessage={`Bạn có chắc chắn muốn xóa thiết bị "${item.name}" không?`}
+                        />
                       </div>
                     </td>
                   </tr>

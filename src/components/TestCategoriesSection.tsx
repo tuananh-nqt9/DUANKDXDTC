@@ -15,10 +15,10 @@ export default async function TestCategoriesSection() {
       <section id="chi-tieu-phep-thu" className="py-20 bg-gray-50/70 border-t border-b border-gray-200">
         <div className="container-custom">
           <div className="text-center mb-10">
-            <span className="inline-block px-5 py-1.5 bg-red-600 text-white rounded-full font-bold text-xs uppercase tracking-wider mb-4 shadow-sm">
+            <span className="inline-block px-4 sm:px-5 py-1 sm:py-1.5 bg-red-600 text-white rounded-full font-bold text-[11px] sm:text-xs uppercase tracking-wider mb-3 sm:mb-4 shadow-sm">
               PHẠM VI HOẠT ĐỘNG
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight break-words px-2 leading-tight">
               DANH MỤC CHỈ TIÊU &amp; PHÉP THỬ
             </h2>
           </div>

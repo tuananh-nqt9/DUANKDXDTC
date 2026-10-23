@@ -1,7 +1,7 @@
 "use client";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Loader2, CheckCircle, AlertCircle, Clock, Navigation } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
@@ -215,7 +215,7 @@ export default function ContactPage() {
         </section>
       </main>
       <Footer />
-      <BackToTop />
+      <FloatingContactWidget />
     </>
   );
 }

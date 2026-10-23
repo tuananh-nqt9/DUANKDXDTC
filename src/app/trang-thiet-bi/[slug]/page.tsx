@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { prisma } from "@/lib/prisma";
 import { COMPANY } from "@/lib/constants";
 import {
@@ -390,7 +390,7 @@ export default async function EquipmentDetailPage({ params }: PageProps) {
       </main>
 
       <Footer />
-      <BackToTop />
+      <FloatingContactWidget />
     </>
   );
 }

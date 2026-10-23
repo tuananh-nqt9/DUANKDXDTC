@@ -3,13 +3,12 @@ import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FAQSection } from "@/components/FAQ";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import TestCategoriesSection from "@/components/TestCategoriesSection";
 import EquipmentSection from "@/components/EquipmentSection";
 import DocumentsSection from "@/components/DocumentsSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CountUp from "@/components/CountUp";
-import { ZaloIcon } from "@/components/icons/ZaloIcon";
 import { prisma } from "@/lib/prisma";
 import { STATS, COMPANY } from "@/lib/constants";
 
@@ -98,21 +97,21 @@ export default async function HomePage() {
           <div className="absolute inset-0 opacity-[0.04] bg-grid-pattern" />
 
           {/* Floating orbs - subtle and premium */}
-          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-primary-600 rounded-full blur-[120px] opacity-20 animate-float-slow" />
-          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-secondary-600 rounded-full blur-[100px] opacity-10 animate-float" style={{ animationDelay: "2s" }} />
+          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-primary-600 rounded-full blur-[120px] opacity-20 animate-float-slow pointer-events-none max-w-full" />
+          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-secondary-600 rounded-full blur-[100px] opacity-10 animate-float pointer-events-none max-w-full" style={{ animationDelay: "2s" }} />
 
-          <div className="container-custom relative z-10 py-20 md:py-0">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="container-custom relative z-10 py-16 sm:py-20 md:py-0">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
               {/* Left content */}
               <div className="max-w-2xl">
                 {/* Badge with shimmer */}
-                <div className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 border border-white/20 px-5 py-2.5 rounded-full text-sm font-semibold mb-8 shadow-glass group hover:bg-white/15 transition-all duration-300">
+                <div className="inline-flex items-center gap-2 backdrop-blur-md bg-white/10 border border-white/20 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold mb-6 sm:mb-8 shadow-glass group hover:bg-white/15 transition-all duration-300">
                   <Shield className="w-4 h-4 text-secondary-300 group-hover:rotate-12 transition-transform duration-300" />
                   <span>Phòng thí nghiệm LAS-XD 795</span>
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 </div>
 
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-6 leading-[1.1] tracking-tight hero-text-shadow">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold mb-4 sm:mb-6 leading-[1.15] tracking-tight hero-text-shadow break-words">
                   THANH CHƯƠNG{" "}
                   <span className="relative inline-block">
                     <span className="bg-gradient-to-r from-secondary-300 via-secondary-400 to-secondary-300 bg-clip-text text-transparent">JSC</span>
@@ -120,12 +119,12 @@ export default async function HomePage() {
                   </span>
                 </h1>
 
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-primary-100/90 mb-6 tracking-wide">
+                <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold text-primary-100/90 mb-4 sm:mb-6 tracking-wide break-words">
                   KIỂM ĐỊNH XÂY DỰNG{" "}
                   <span className="text-secondary-300">CHUYÊN NGHIỆP</span>
                 </h2>
 
-                <p className="text-base md:text-lg text-primary-100/80 mb-10 leading-relaxed max-w-xl">
+                <p className="text-sm sm:text-base md:text-lg text-primary-100/80 mb-8 sm:mb-10 leading-relaxed max-w-xl">
                   Đơn vị tư vấn xây dựng hàng đầu với{" "}
                   <strong className="text-secondary-200 font-bold">
                     hơn {STATS.experience.replace('+', '')} năm kinh nghiệm
@@ -133,15 +132,15 @@ export default async function HomePage() {
                   trong lĩnh vực Thí nghiệm, Kiểm định, Giám sát và Tư vấn xây dựng trong và ngoài nước.
                 </p>
 
-                <div className="flex flex-wrap gap-4 mb-12">
-                  <Link href="/lien-he" className="group inline-flex items-center gap-2.5 px-8 py-4 bg-secondary-500 hover:bg-secondary-600 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95">
-                    <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 w-full sm:w-auto">
+                  <Link href="/lien-he" className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 bg-secondary-500 hover:bg-secondary-600 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 text-sm sm:text-base">
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
                     Yêu cầu tư vấn
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
                   <Link
                     href="/gioi-thieu"
-                    className="group inline-flex items-center gap-2 px-8 py-4 backdrop-blur-md bg-white/10 border border-white/25 text-white font-semibold rounded-xl transition-all duration-300 hover:bg-white/20 hover:border-white/40 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-8 sm:py-4 backdrop-blur-md bg-white/10 border border-white/25 text-white font-semibold rounded-xl transition-all duration-300 hover:bg-white/20 hover:border-white/40 active:scale-95 text-sm sm:text-base"
                   >
                     Tìm hiểu thêm
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -312,7 +311,7 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full min-w-0">
               {services.map((service, idx) => {
                 const IconComp = iconMap[service.icon] || FlaskConical;
                 return (
@@ -409,14 +408,14 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full min-w-0">
               {projects.map((project, idx) => (
-                <ScrollReveal key={project.id} variant="fade-up" delay={idx * 100}>
+                <ScrollReveal key={project.id} variant="fade-up" delay={idx * 100} className="w-full min-w-0">
                   <Link
                     href={`/du-an/${project.slug}`}
-                    className="card group block hover:shadow-2xl transition-all duration-500 overflow-hidden h-full"
+                    className="card group block hover:shadow-2xl transition-all duration-500 overflow-hidden h-full w-full max-w-full min-w-0"
                   >
-                    <div className="relative h-64 overflow-hidden bg-gray-900 flex items-center justify-center">
+                    <div className="relative aspect-[16/10] sm:h-64 w-full overflow-hidden bg-gray-900 flex items-center justify-center">
                       {project.image && (
                         <>
                           {/* Blurred background image */}
@@ -441,32 +440,34 @@ export default async function HomePage() {
                       )}
 
                       {project.featured && (
-                        <span className="absolute top-4 left-4 backdrop-blur-md bg-secondary-500/90 text-white text-xs px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 shadow-lg border border-secondary-400/30">
+                        <span className="absolute top-3 left-3 sm:top-4 sm:left-4 backdrop-blur-md bg-secondary-500/90 text-white text-xs px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full font-bold flex items-center gap-1.5 shadow-lg border border-secondary-400/30">
                           <Sparkles className="w-3 h-3" />
                           Nổi bật
                         </span>
                       )}
 
                       {/* Hover arrow */}
-                      <div className="absolute top-4 right-4 w-10 h-10 backdrop-blur-md bg-white/10 border border-white/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:rotate-45">
-                        <ArrowRight className="w-5 h-5 text-white" />
+                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 backdrop-blur-md bg-white/10 border border-white/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:rotate-45">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
                     </div>
 
-                    <div className="p-6 relative">
-                      <h3 className="font-bold text-lg text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300">
+                    <div className="p-4 sm:p-6 relative">
+                      <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2.5 break-words line-clamp-2 group-hover:text-primary-600 transition-colors duration-300">
                         {project.title}
                       </h3>
 
-                      <div className="flex items-center justify-between text-sm text-gray-500 gap-4">
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="w-4 h-4 text-primary-500" />
-                          <span className="truncate">{project.location}</span>
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-4 h-4 text-primary-500" />
-                          <span>{project.year}</span>
-                        </span>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm text-gray-500 gap-1.5 sm:gap-4 pt-2 border-t border-gray-100 min-w-0">
+                        <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                          <MapPin className="w-4 h-4 text-primary-500 flex-shrink-0" />
+                          <span className="truncate" title={project.location || ""}>
+                            {project.location || "Đang cập nhật"}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-shrink-0 text-gray-500 font-medium">
+                          <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" />
+                          <span>{project.year ? `Năm ${project.year}` : "N/A"}</span>
+                        </div>
                       </div>
 
                       {/* Bottom accent line */}
@@ -478,8 +479,8 @@ export default async function HomePage() {
             </div>
 
             <ScrollReveal delay={300}>
-              <div className="text-center mt-12">
-                <Link href="/du-an" className="btn-primary group">
+              <div className="text-center mt-8 sm:mt-12 px-4">
+                <Link href="/du-an" className="btn-primary w-full sm:w-auto text-sm sm:text-base py-3 px-6 group inline-flex items-center justify-center">
                   Xem tất cả dự án
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
@@ -513,7 +514,7 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full min-w-0">
               {[
                 { icon: Shield, title: "Uy tín hàng đầu", desc: "Phòng TN LAS-XD 795 được Bộ Xây dựng công nhận, hoạt động theo chuẩn quốc tế" },
                 { icon: Award, title: "Chuyên gia giàu kinh nghiệm", desc: "Đội ngũ kỹ sư có chứng chỉ hành nghề, nhiều năm kinh nghiệm thực tế" },
@@ -561,26 +562,26 @@ export default async function HomePage() {
                   Liên hệ tư vấn miễn phí
                 </div>
 
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight hero-text-shadow">
+                <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight hero-text-shadow break-words">
                   CẦN TƯ VẤN VỀ DỰ ÁN?
                 </h2>
 
-                <p className="text-primary-100/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-primary-100/80 text-base sm:text-lg md:text-xl mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed">
                   Liên hệ ngay với chúng tôi để được tư vấn miễn phí và nhận báo giá chi tiết trong vòng{" "}
                   <span className="font-bold text-secondary-300">24 giờ</span>
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full sm:w-auto max-w-md mx-auto sm:max-w-none">
                   <a
                     href={`tel:${COMPANY.contact.hotline}`}
-                    className="group inline-flex items-center gap-2.5 px-8 py-4 bg-white text-primary-900 font-bold rounded-xl hover:bg-primary-50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 bg-white text-primary-900 font-bold rounded-xl hover:bg-primary-50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 text-sm sm:text-base w-full sm:w-auto"
                   >
                     <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                     Gọi {COMPANY.contact.hotline}
                   </a>
                   <Link
                     href="/lien-he"
-                    className="group inline-flex items-center gap-2 px-8 py-4 backdrop-blur-md bg-white/10 border border-white/25 text-white font-semibold rounded-xl transition-all duration-300 hover:bg-white/20 hover:border-white/40 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-8 sm:py-4 backdrop-blur-md bg-white/10 border border-white/25 text-white font-semibold rounded-xl transition-all duration-300 hover:bg-white/20 hover:border-white/40 active:scale-95 text-sm sm:text-base w-full sm:w-auto"
                   >
                     <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                     Gửi yêu cầu
@@ -609,7 +610,7 @@ export default async function HomePage() {
                 </div>
               </ScrollReveal>
 
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full min-w-0">
                 {posts.map((post, idx) => (
                   <ScrollReveal key={post.id} variant="fade-up" delay={idx * 100}>
                     <article className="card-premium group h-full flex flex-col overflow-hidden">
@@ -681,7 +682,7 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 w-full min-w-0">
               {COMPANY.offices.map((office, idx) => (
                 <ScrollReveal key={office.id} variant="fade-up" delay={idx * 150}>
                   <div className="card-premium overflow-hidden group">
@@ -740,9 +741,9 @@ export default async function HomePage() {
                         href={office.map}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold px-6 py-3.5 rounded-xl hover:shadow-xl transition-all duration-300 group/btn active:scale-95 hover:-translate-y-0.5"
+                        className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl hover:shadow-xl transition-all duration-300 group/btn active:scale-95 hover:-translate-y-0.5 text-sm sm:text-base"
                       >
-                        <Navigation className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                        <Navigation className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" />
                         Xem chỉ đường trên Google Maps
                       </a>
                     </div>
@@ -756,49 +757,8 @@ export default async function HomePage() {
 
       <Footer />
 
-      {/* ==================== Floating Contact Buttons ==================== */}
-      <div className="fixed right-4 md:right-6 bottom-4 md:bottom-6 z-50 flex flex-col gap-3">
-        <BackToTop />
-
-        {/* Phone Button */}
-        <a
-          href={`tel:${COMPANY.contact.hotline}`}
-          className="group relative w-14 h-14 md:w-16 md:h-16 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-neon-red hover:shadow-neon-red transition-all duration-300 hover:scale-110 active:scale-95"
-          title="Gọi ngay"
-        >
-          <span className="absolute inset-0 rounded-full bg-primary-600 animate-ping opacity-20" />
-          <Phone className="w-6 h-6 md:w-7 md:h-7 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
-          <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            Gọi ngay
-          </span>
-        </a>
-
-        <a
-          href={`mailto:${COMPANY.contact.email}`}
-          className="group relative w-14 h-14 md:w-16 md:h-16 bg-red-600 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
-          title="Gửi email"
-        >
-          <span className="absolute inset-0 rounded-full bg-red-400 blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
-          <Mail className="w-6 h-6 md:w-7 md:h-7 relative z-10 group-hover:scale-110 transition-transform duration-300" />
-          <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            Gửi email
-          </span>
-        </a>
-
-        <a
-          href={COMPANY.social.zalo}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative w-14 h-14 md:w-16 md:h-16 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
-          title="Chat Zalo"
-        >
-          <span className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-20" style={{ animationDelay: "0.5s" }} />
-          <ZaloIcon className="w-7 h-7 md:w-8 md:h-8 relative z-10 group-hover:scale-110 transition-transform duration-300" />
-          <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            Chat Zalo
-          </span>
-        </a>
-      </div>
+      {/* ==================== Floating Contact & Back to Top Widget ==================== */}
+      <FloatingContactWidget />
     </>
   );
 }

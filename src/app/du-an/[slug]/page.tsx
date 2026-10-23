@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { prisma } from "@/lib/prisma";
 import { MapPin, Calendar, ArrowLeft, Building2 } from "lucide-react";
 
@@ -115,7 +116,7 @@ export default async function ProjectDetailPage({
                   ⭐ Dự án nổi bật
                 </span>
               )}
-              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 leading-tight break-words">
                 {project.title}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-white/90">
@@ -221,7 +222,7 @@ export default async function ProjectDetailPage({
                 <span className="w-1 h-8 bg-primary-600 rounded" />
                 Dự án khác
               </h2>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full min-w-0">
                 {otherProjects.map((p) => (
                   <Link
                     key={p.id}
@@ -257,6 +258,7 @@ export default async function ProjectDetailPage({
         )}
       </main>
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 }

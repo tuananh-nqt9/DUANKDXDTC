@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { prisma } from "@/lib/prisma";
 import EquipmentListWithFilter from "@/components/EquipmentListWithFilter";
 import {
@@ -165,17 +165,17 @@ export default async function EquipmentPage() {
               Hãy liên hệ với Công ty Thanh Chương để được tư vấn phương án thí nghiệm tối ưu và
               nhận báo giá chi tiết cho công trình của quý đối tác.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
               <a
                 href={`tel:${COMPANY.contact.hotline}`}
-                className="btn-primary !bg-secondary-500 hover:!bg-secondary-600 inline-flex items-center gap-2 shadow-lg hover:shadow-xl font-bold text-white px-6 py-3.5 rounded-xl"
+                className="btn-primary !bg-secondary-500 hover:!bg-secondary-600 inline-flex items-center justify-center gap-2 shadow-lg hover:shadow-xl font-bold text-white px-6 py-3.5 rounded-xl w-full sm:w-auto text-sm sm:text-base"
               >
                 <Phone className="w-5 h-5" />
                 Hotline: {COMPANY.contact.hotline}
               </a>
               <Link
                 href="/lien-he"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold transition-all backdrop-blur-md"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold transition-all backdrop-blur-md w-full sm:w-auto text-sm sm:text-base"
               >
                 <Mail className="w-5 h-5" />
                 Gửi yêu cầu báo giá
@@ -186,7 +186,7 @@ export default async function EquipmentPage() {
       </main>
 
       <Footer />
-      <BackToTop />
+      <FloatingContactWidget />
     </>
   );
 }

@@ -1,15 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import { Plus, Edit, Trash2, Eye, EyeOff, Building2, ExternalLink, MapPin, Calendar } from "lucide-react";
+import { Plus, Edit, Eye, EyeOff, Building2, ExternalLink, MapPin, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { toggleProjectPublish, deleteProject } from "./actions";
+import AdminDeleteButton from "@/components/admin/AdminDeleteButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const projects = await prisma.project.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-  });
+  let projects: any[] = [];
+  try {
+    projects = await prisma.project.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+    });
+  } catch (err) {
+    console.warn("Could not query projects with order sort, falling back to createdAt:", err);
+    try {
+      projects = await prisma.project.findMany({
+        orderBy: { createdAt: "desc" },
+      });
+    } catch (err2) {
+      console.error("Critical error querying projects:", err2);
+      projects = [];
+    }
+  }
 
   return (
     <div>
@@ -61,50 +75,56 @@ export default async function ProjectsPage() {
                 </tr>
               ) : (
                 projects.map((project) => (
-                  <tr key={project.id} className="hover:bg-slate-50/70 transition-colors">
+                  <tr key={project.id} className="hover:bg-gray-50/80 transition-colors">
                     {/* Thứ tự */}
-                    <td className="px-5 py-4 text-center font-bold text-gray-600">
-                      {project.order}
+                    <td className="px-5 py-4 text-center font-semibold text-gray-500">
+                      #{project.order ?? 0}
                     </td>
 
                     {/* Hình ảnh */}
                     <td className="px-5 py-4">
-                      <div className="w-16 h-12 rounded-lg bg-gray-100 overflow-hidden relative border border-gray-200 flex items-center justify-center flex-shrink-0">
+                      <div className="relative w-20 h-14 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 flex-shrink-0">
                         {project.image ? (
-                          <img
+                          <Image
                             src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover"
+                            alt={project.title || "Dự án"}
+                            fill
+                            className="object-cover"
+                            sizes="80px"
                           />
                         ) : (
-                          <Building2 className="w-5 h-5 text-gray-400" />
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <Building2 className="w-6 h-6" />
+                          </div>
                         )}
                       </div>
                     </td>
 
-                    {/* Tên dự án & slug */}
-                    <td className="px-5 py-4 max-w-xs">
-                      <div className="font-bold text-gray-900 line-clamp-1 hover:text-primary-600">
-                        {project.title}
+                    {/* Tên dự án */}
+                    <td className="px-5 py-4">
+                      <div className="font-semibold text-gray-900 hover:text-primary-600 transition-colors">
+                        <Link href={`/admin/projects/${project.id}`}>{project.title}</Link>
                       </div>
-                      <div className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                        {project.excerpt || "Chưa có mô tả ngắn"}
-                      </div>
-                      <div className="text-xs font-mono text-gray-400 mt-0.5 truncate">
+                      <div className="text-xs text-gray-400 font-mono mt-0.5">
                         /{project.slug}
                       </div>
+                      {project.category && (
+                        <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+                          {project.category}
+                        </span>
+                      )}
                     </td>
 
-                    {/* Khách hàng */}
-                    <td className="px-5 py-4 text-gray-700">
-                      {project.client || <span className="text-gray-400">-</span>}
+                    {/* Khách hàng / Chủ đầu tư */}
+                    <td className="px-5 py-4 text-gray-600 font-medium">
+                      {project.client || <span className="text-gray-300 font-normal">-</span>}
                     </td>
 
                     {/* Địa điểm & Năm */}
-                    <td className="px-5 py-4 text-xs text-gray-600 whitespace-nowrap">
+                    <td className="px-5 py-4 text-gray-500 text-xs">
                       {project.location && (
-                        <div className="flex items-center gap-1 mb-0.5">
-                          <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                        <div className="flex items-center gap-1 mb-1 text-gray-700">
+                          <MapPin className="w-3.5 h-3.5 text-primary-500" />
                           <span>{project.location}</span>
                         </div>
                       )}
@@ -113,6 +133,9 @@ export default async function ProjectsPage() {
                           <Calendar className="w-3.5 h-3.5 text-gray-400" />
                           <span>{project.year}</span>
                         </div>
+                      )}
+                      {!project.location && !project.year && (
+                        <span className="text-gray-300">-</span>
                       )}
                     </td>
 
@@ -170,22 +193,12 @@ export default async function ProjectsPage() {
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
-                        <form
-                          action={deleteProject.bind(null, project.id)}
-                          onSubmit={(e) => {
-                            if (!confirm(`Bạn có chắc chắn muốn xóa dự án "${project.title}"?`)) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          <button
-                            type="submit"
-                            className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Xóa dự án"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </form>
+                        <AdminDeleteButton
+                          itemId={project.id}
+                          itemName={project.title}
+                          deleteAction={deleteProject}
+                          confirmMessage={`Bạn có chắc chắn muốn xóa dự án "${project.title}"?`}
+                        />
                       </div>
                     </td>
                   </tr>

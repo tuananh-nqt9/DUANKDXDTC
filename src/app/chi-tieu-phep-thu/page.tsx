@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { TopBar, Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BackToTop } from "@/components/BackToTop";
+import FloatingContactWidget from "@/components/FloatingContactWidget";
 import { DownloadButton } from "@/components/DownloadButton";
 import { prisma } from "@/lib/prisma";
 import { FlaskConical, TestTube, ArrowRight, Shield, FileText } from "lucide-react";
@@ -51,7 +51,7 @@ export default async function TestCategoriesPage() {
                 <TestTube className="w-8 h-8 text-secondary-400" />
                 <span className="text-secondary-400 font-semibold">Năng lực thí nghiệm</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-4 break-words leading-tight">
                 Danh mục chỉ tiêu phép thử
               </h1>
               <p className="text-lg text-primary-100">
@@ -75,7 +75,7 @@ export default async function TestCategoriesPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full min-w-0">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
@@ -140,11 +140,11 @@ export default async function TestCategoriesPage() {
               Được Bộ Xây dựng công nhận, đội ngũ kỹ sư chuyên nghiệp, thiết bị hiện đại. 
               Cam kết cung cấp kết quả chính xác, báo cáo nhanh chóng.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link href="/lien-he" className="btn-primary !bg-secondary-500 hover:!bg-secondary-600">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full sm:w-auto max-w-sm mx-auto sm:max-w-none">
+              <Link href="/lien-he" className="btn-primary !bg-secondary-500 hover:!bg-secondary-600 text-sm sm:text-base py-3 px-6 justify-center">
                 Yêu cầu báo giá
               </Link>
-              <Link href="/gioi-thieu" className="btn-primary !bg-white !text-primary-900 hover:!bg-gray-100">
+              <Link href="/gioi-thieu" className="btn-primary !bg-white !text-primary-900 hover:!bg-gray-100 text-sm sm:text-base py-3 px-6 justify-center">
                 Về chúng tôi
               </Link>
             </div>
@@ -153,7 +153,7 @@ export default async function TestCategoriesPage() {
       </main>
 
       <Footer />
-      <BackToTop />
+      <FloatingContactWidget />
     </>
   );
 }
